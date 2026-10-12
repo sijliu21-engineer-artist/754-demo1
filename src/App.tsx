@@ -121,7 +121,7 @@ function Header({ title, back, action }: { title: string; back?: () => void; act
           ‹ Back
         </button>
       )}
-      <h1>{title}</h1>
+      <h1 className={title === "Records assistant" ? "ai-title" : undefined}>{title}</h1>
       {action && <div className="header-action">{action}</div>}
     </header>
   );
@@ -235,7 +235,7 @@ function Stepper({ complete = false }: { complete?: boolean }) {
       {["Upload files", "OCR & privacy", "AI generation", "Edit & export"].map((label, i) => (
         <div key={label}>
           <b className={complete || i === 0 ? "filled" : ""}>{i + 1}</b>
-          <span>{label}</span>
+          <span className={label === "AI generation" ? "ai-text" : undefined}>{label}</span>
         </div>
       ))}
     </div>
@@ -628,9 +628,9 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
           </p>
         </Card>
         <Card>
-          <h2>Ask AI&nbsp; · &nbsp;Find test results</h2>
+          <h2 className="ai-text">Ask AI&nbsp; · &nbsp;Find test results</h2>
           <p>For example: Is hemoglobin in my records? What is the value?</p>
-          <Button onClick={() => nav("assistant")}>Ask AI / Find a result</Button>
+          <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI / Find a result</Button>
           <Button onClick={() => nav("chart")}>Compare past results</Button>
         </Card>
       </div>
@@ -763,7 +763,7 @@ function Profile({ nav }: { nav: Nav }) {
           <Row title="Report from my uploads" detail="View your saved summary or generate one from your files" onClick={() => nav("details")} />
           <Row title="Privacy management" detail="View and update previous redactions" onClick={() => nav("privacy")} />
           <Row title="Sharing" detail="Share a QR code or link with family or doctors" onClick={() => nav("sharing")} />
-          <Button onClick={() => nav("assistant")}>Ask AI · Find my results</Button>
+          <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find my results</Button>
           <Button onClick={() => nav("chart")}>Compare past results</Button>
         </Card>
         <Card>
@@ -1118,7 +1118,7 @@ function RecordPreview({
           </p>
         </article>
         <div className="record-preview-actions">
-          <Button onClick={() => nav("assistant")}>Ask AI · Explain this report</Button>
+          <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Explain this report</Button>
           <Button onClick={() => nav("chart")}>Compare related results</Button>
         </div>
       </div>
@@ -1162,7 +1162,7 @@ function Uploaded({ back, nav }: { back: () => void; nav: Nav }) {
                     <Icon name={record.mimeType.startsWith("image/") ? "image" : "doc"} />
                     <small>{record.fileName}</small>
                     {record.files && <small>{record.files.length} original file(s)</small>}
-                    <small>
+                    <small className={record.extractionStatus === "ready" ? "ai-text" : undefined}>
                       {record.extractionStatus === "ready"
                         ? "AI searchable"
                         : record.extractionStatus === "needs_ocr"
@@ -1303,7 +1303,7 @@ function Medical({ back, nav }: { back: () => void; nav: Nav }) {
 
 function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => void; nav: Nav; uploaded?: boolean; recordId?: string }) {
   if (uploaded) return (
-    <AppShell title="Medical report" back={back} fixedAction={<Button onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
+    <AppShell title="Medical report" back={back} fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
       <UploadedReport key={recordId || "combined"} recordId={recordId} onUpload={() => nav("generate")} />
     </AppShell>
   );
@@ -1312,7 +1312,7 @@ function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => 
       title="Medical report"
       back={back}
       fixedAction={
-        <Button onClick={() => nav("assistant")}>
+        <Button className="ai-text" onClick={() => nav("assistant")}>
           Ask AI · Find &amp; explain
         </Button>
       }
@@ -1353,7 +1353,7 @@ function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => 
             <Button className="report-action" onClick={() => nav("chart")}>
               Interactive comparison
             </Button>
-            <Button className="report-action" onClick={() => nav("assistant")}>
+            <Button className="report-action ai-text" onClick={() => nav("assistant")}>
               Ask AI · Find &amp; explain
             </Button>
           </div>
@@ -1368,7 +1368,7 @@ function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => 
           <div className="report-metric">
             <small>Response assessment</small>
             <p>Continued SD / No progression</p>
-            <small>Source: AI summary</small>
+            <small className="ai-text">Source: AI summary</small>
           </div>
         </Card>
         <Card>
@@ -1376,7 +1376,7 @@ function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => 
           <div className="report-metric">
             <small>Question 1</small>
             <p>Should targeted maintenance therapy continue? For how long?</p>
-            <small>Source: AI generated</small>
+            <small className="ai-text">Source: AI generated</small>
           </div>
           <div className="report-metric">
             <small>Question 2</small>
@@ -1521,7 +1521,7 @@ function Assistant({ back, nav }: { back: () => void; nav: Nav }) {
           disabled={loading}
         />
         <button disabled={loading || !text.trim()}>{loading ? "…" : "↑"}</button>
-        <small>AI may make mistakes · Verify against original records</small>
+        <small className="ai-text">AI may make mistakes · Verify against original records</small>
       </form>
     </AppShell>
   );
@@ -1532,7 +1532,7 @@ function Compare({ table, back, nav }: { table?: boolean; back: () => void; nav:
     <AppShell
       title={table ? "Compare results · Table" : "Compare past results"}
       back={back}
-      fixedAction={<Button onClick={() => nav("assistant")}>Ask AI · {table ? "Find & explain" : "Explain this result"}</Button>}
+      fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · {table ? "Find & explain" : "Explain this result"}</Button>}
     >
       <div className="content compare-content">
         <Card><h2>Hemoglobin&nbsp; · &nbsp;g/L</h2><p>Selected: 06-26 and 07-06</p>{!table && <p className="caption">Year not recorded. Check the original lab report.</p>}<Button onClick={() => nav(table ? "chart" : "table")}>{table ? "Show trend chart" : "Show data table"}</Button></Card>

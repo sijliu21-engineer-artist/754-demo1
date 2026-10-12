@@ -116,7 +116,7 @@ export default function UploadedReport({ onUpload, recordId }: { onUpload: () =>
       </>}
     </section>
     {report?.warnings.length ? <section className="card confirm-card"><h2>Items to verify</h2>{report.warnings.map((warning, i) => <p className="notice" key={i}>{warning}</p>)}</section> : null}
-    {report && sections.map(([key, title]) => <section className="card" key={key}>
+    {report && sections.map(([key, title]) => <section className="card ai-generated-content" key={key}>
       <h2>{title}</h2>
       {report.sections[key]?.length ? report.sections[key].map((fact, i) => <div className="report-metric" key={i}>
         <small>{fact.label}</small><p style={{ whiteSpace: "pre-wrap" }}>{fact.value}</p>
@@ -125,6 +125,6 @@ export default function UploadedReport({ onUpload, recordId }: { onUpload: () =>
         <details><summary>View recognized source text</summary><p style={{ whiteSpace: "pre-wrap" }}>{fact.quote}</p></details>
       </div>) : <p className="subtle">Not provided in the uploaded reports.</p>}
     </section>)}
-    {report && <section className="card"><h2>Source files</h2>{report.sources.map((source) => <p key={source.id}>{source.fileName}</p>)}<p className="caption">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
+    {report && <section className="card"><h2>Source files</h2>{report.sources.map((source) => <p key={source.id}>{source.fileName}</p>)}<p className="caption ai-text">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
   </div>;
 }

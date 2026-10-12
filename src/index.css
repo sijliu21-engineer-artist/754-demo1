@@ -1565,3 +1565,18 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* AI entry points and generated content share one text color. */
+.ai-text,
+.button.ai-text,
+.ai-message,
+.ai-message strong,
+.ai-message p,
+.ai-thinking,
+.ai-generated-content,
+.ai-generated-content h2,
+.ai-generated-content small,
+.ai-generated-content p {
+  color: #b42318;
+}
+.topbar .ai-title { color: #ff9b91; }
