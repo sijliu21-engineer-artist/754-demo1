@@ -486,15 +486,15 @@ function AuthForm({
 }
 
 function UploadConfirmation({
-  fileName,
-  count,
+  files,
+  remove,
   clear,
   submit,
   loading,
   error,
 }: {
-  fileName: string;
-  count: number;
+  files: File[];
+  remove: (index: number) => void;
   clear: () => void;
   submit: () => void;
   loading: boolean;
@@ -502,14 +502,22 @@ function UploadConfirmation({
 }) {
   return (
     <div className="upload-confirm">
-      <div className="file-tile">
-        <Icon name={fileName.toLowerCase().endsWith(".pdf") ? "pdf" : "image"} size={17} />
-        <span>{fileName.toLowerCase().endsWith(".pdf") ? "PDF" : "Image"}</span>
-        <button onClick={clear} disabled={loading}>×</button>
+      <div className="upload-selection-heading">
+        <strong>{files.length} file(s) selected</strong>
+        <button onClick={clear} disabled={loading}>Clear all</button>
       </div>
-      <small>{fileName}</small>
+      <ul className="upload-selection-list" aria-label="Selected files">
+        {files.map((file, index) => (
+          <li key={`${file.name}-${file.lastModified}-${index}`}>
+            <Icon name={file.name.toLowerCase().endsWith(".pdf") ? "pdf" : "image"} size={20} />
+            <div><span>{file.name}</span><small>{(file.size / (1024 * 1024)).toFixed(2)} MB</small></div>
+            <button onClick={() => remove(index)} disabled={loading} aria-label={`Remove ${file.name}`}>×</button>
+          </li>
+        ))}
+      </ul>
+      <p className="caption">Total: {(files.reduce((total, file) => total + file.size, 0) / (1024 * 1024)).toFixed(2)} MB · One combined report</p>
       <Button primary onClick={submit} disabled={loading}>
-        {loading ? "Saving & extracting…" : `Upload ${count} file(s) & generate one report`}
+        {loading ? "Saving & extracting…" : `Upload ${files.length} file(s) & generate one report`}
       </Button>
       {error && <p className="upload-error" role="alert">{error}</p>}
     </div>
@@ -601,8 +609,12 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
           />
           {files.length > 0 && (
             <UploadConfirmation
-              fileName={files.map((file) => file.name).join(" · ")}
-              count={files.length}
+              files={files}
+              remove={(index) => {
+                setFiles((current) => current.filter((_, fileIndex) => fileIndex !== index));
+                setUploadError("");
+                if (picker.current) picker.current.value = "";
+              }}
               clear={() => { setFiles([]); if (picker.current) picker.current.value = ""; }}
               submit={upload}
               loading={uploading}

@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+.upload-selection-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.upload-selection-heading button { font-size: 14px; text-decoration: underline; }
+.upload-selection-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; width: 100%; }
+.upload-selection-list li { display: flex; align-items: center; gap: 12px; border: 1px solid #d6e3d7; border-radius: 12px; padding: 12px; }
+.upload-selection-list li > div { flex: 1; min-width: 0; }
+.upload-selection-list li span { display: block; overflow-wrap: anywhere; }
+.upload-selection-list li small { display: block; color: #7c8d86; margin-top: 4px; }
+.upload-selection-list li button { min-width: 36px; min-height: 36px; font-size: 22px; }
+.upload-selection-heading button:disabled, .upload-selection-list button:disabled { opacity: .5; cursor: wait; }
+
 .record-preview-backdrop {
   position: fixed;
   inset: 0;
