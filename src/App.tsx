@@ -628,7 +628,7 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
           </p>
         </Card>
         <Card>
-          <h2 className="ai-text">Ask AI&nbsp; · &nbsp;Find test results</h2>
+          <h2>Ask AI&nbsp; · &nbsp;Find test results</h2>
           <p>For example: Is hemoglobin in my records? What is the value?</p>
           <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI / Find a result</Button>
           <Button onClick={() => nav("chart")}>Compare past results</Button>
