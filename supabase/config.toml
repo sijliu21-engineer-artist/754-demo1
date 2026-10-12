@@ -1,0 +1,6 @@
+project_id = "IXDS754-Backend"
+
+[functions.make-server-ba71e98d]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/server/index.ts"

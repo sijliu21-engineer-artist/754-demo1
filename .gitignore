@@ -1,0 +1,16 @@
+node_modules/
+.vite/
+dist/
+tmp/
+output/
+test image/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+.DS_Store
+Thumbs.db
+supabase/.temp/
+supabase/.branches/
