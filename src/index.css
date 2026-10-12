@@ -1573,11 +1573,14 @@ textarea {
 .ai-message,
 .ai-message strong,
 .ai-message p,
-.ai-thinking,
+.ai-thinking {
+  color: #b42318;
+}
 .ai-generated-content,
 .ai-generated-content h2,
 .ai-generated-content small,
-.ai-generated-content p {
-  color: #b42318;
+.ai-generated-content p,
+.ai-generated-content summary {
+  color: #214e3b;
 }
 .topbar .ai-title { color: #ff9b91; }

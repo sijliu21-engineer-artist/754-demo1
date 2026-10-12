@@ -125,6 +125,6 @@ export default function UploadedReport({ onUpload, recordId }: { onUpload: () =>
         <details><summary>View recognized source text</summary><p style={{ whiteSpace: "pre-wrap" }}>{fact.quote}</p></details>
       </div>) : <p className="subtle">Not provided in the uploaded reports.</p>}
     </section>)}
-    {report && <section className="card"><h2>Source files</h2>{report.sources.map((source) => <p key={source.id}>{source.fileName}</p>)}<p className="caption ai-text">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
+    {report && <section className="card ai-generated-content"><h2>Source files</h2>{report.sources.map((source) => <p key={source.id}>{source.fileName}</p>)}<p className="caption">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
   </div>;
 }
