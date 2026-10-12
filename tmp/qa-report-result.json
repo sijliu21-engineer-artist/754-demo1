@@ -1,0 +1,295 @@
+{
+  "revision": "907597b621050df0c2b44fae1c4e39ab100fb72a25070a6a8bffeea95b194608",
+  "generatedAt": "2026-10-11T22:41:27.867Z",
+  "sections": {
+    "basic": [
+      {
+        "label": "患者",
+        "value": "性别：男    年龄：38岁",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "患者：[NAME REDACTED]    性别：男    年龄：38岁"
+      },
+      {
+        "label": "检查日期",
+        "value": "2026-10-10",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检查日期：2026-10-10    报告日期：2026-10-11    编号：SIM-01"
+      },
+      {
+        "label": "主要诊断",
+        "value": "右肺上叶肺腺癌（依据第09份模拟穿刺病理）",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "二、主要诊断：右肺上叶肺腺癌（依据第09份模拟穿刺病理）。"
+      }
+    ],
+    "treatment": [],
+    "results": [
+      {
+        "label": "白细胞",
+        "value": "7.80 10^9/L 3.50-9.50 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "白细胞\r\n7.80\r\n10^9/L\r\n3.50-9.50\r\n正常"
+      },
+      {
+        "label": "红细胞",
+        "value": "3.92 10^12/L 4.30-5.80 偏低",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "红细胞\r\n3.92\r\n10^12/L\r\n4.30-5.80\r\n偏低"
+      },
+      {
+        "label": "血红蛋白",
+        "value": "112 g/L 130-175 偏低",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "血红蛋白\r\n112\r\ng/L\r\n130-175\r\n偏低"
+      },
+      {
+        "label": "红细胞压积",
+        "value": "34.1 % 40.0-50.0 偏低",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "红细胞压积\r\n34.1\r\n%\r\n40.0-50.0\r\n偏低"
+      },
+      {
+        "label": "平均红细胞体积",
+        "value": "87.0 fL 82.0-100.0 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "平均红细胞体积\r\n87.0\r\nfL\r\n82.0-100.0\r\n正常"
+      },
+      {
+        "label": "血小板",
+        "value": "328 10^9/L 125-350 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "血小板\r\n328\r\n10^9/L\r\n125-350\r\n正常"
+      },
+      {
+        "label": "中性粒细胞比例",
+        "value": "68.0 % 40.0-75.0 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "中性粒细胞比例\r\n68.0\r\n%\r\n40.0-75.0\r\n正常"
+      },
+      {
+        "label": "ALT",
+        "value": "32 U/L 9-50 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "ALT\r\n32\r\nU/L\r\n9-50\r\n正常"
+      },
+      {
+        "label": "AST",
+        "value": "29 U/L 15-40 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "AST\r\n29\r\nU/L\r\n15-40\r\n正常"
+      },
+      {
+        "label": "白蛋白",
+        "value": "34.0 g/L 40-55 偏低",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "白蛋白\r\n34.0\r\ng/L\r\n40-55\r\n偏低"
+      },
+      {
+        "label": "总胆红素",
+        "value": "13.5 μmol/L 0-21 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "总胆红素\r\n13.5\r\nμmol/L\r\n0-21\r\n正常"
+      },
+      {
+        "label": "碱性磷酸酶 ALP",
+        "value": "168 U/L 45-125 偏高",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "碱性磷酸酶 ALP\r\n168\r\nU/L\r\n45-125\r\n偏高"
+      },
+      {
+        "label": "肌酐",
+        "value": "82 μmol/L 57-97 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "肌酐\r\n82\r\nμmol/L\r\n57-97\r\n正常"
+      },
+      {
+        "label": "尿素",
+        "value": "5.6 mmol/L 3.1-8.0 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "尿素\r\n5.6\r\nmmol/L\r\n3.1-8.0\r\n正常"
+      },
+      {
+        "label": "钾",
+        "value": "4.1 mmol/L 3.5-5.3 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "钾\r\n4.1\r\nmmol/L\r\n3.5-5.3\r\n正常"
+      },
+      {
+        "label": "钠",
+        "value": "138 mmol/L 137-147 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "钠\r\n138\r\nmmol/L\r\n137-147\r\n正常"
+      },
+      {
+        "label": "凝血酶原时间 PT",
+        "value": "12.6 秒 11.0-14.0 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "凝血酶原时间 PT\r\n12.6\r\n秒\r\n11.0-14.0\r\n正常"
+      },
+      {
+        "label": "国际标准化比值 INR",
+        "value": "1.02 - 0.80-1.20 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "国际标准化比值 INR\r\n1.02\r\n-\r\n0.80-1.20\r\n正常"
+      },
+      {
+        "label": "APTT",
+        "value": "31.5 秒 25.0-35.0 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "APTT\r\n31.5\r\n秒\r\n25.0-35.0\r\n正常"
+      },
+      {
+        "label": "纤维蛋白原",
+        "value": "4.6 g/L 2.0-4.0 偏高",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "纤维蛋白原\r\n4.6\r\ng/L\r\n2.0-4.0\r\n偏高"
+      },
+      {
+        "label": "D-二聚体",
+        "value": "0.92 mg/L FEU <0.50 偏高",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "D-二聚体\r\n0.92\r\nmg/L FEU\r\n<0.50\r\n偏高"
+      },
+      {
+        "label": "癌胚抗原 CEA",
+        "value": "42.6 ng/mL <5.0 偏高",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "癌胚抗原 CEA\r\n42.6\r\nng/mL\r\n<5.0\r\n偏高"
+      },
+      {
+        "label": "CYFRA21-1",
+        "value": "6.8 ng/mL <3.3 偏高",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "CYFRA21-1\r\n6.8\r\nng/mL\r\n<3.3\r\n偏高"
+      },
+      {
+        "label": "神经元特异性烯醇化酶",
+        "value": "13.2 ng/mL <16.3 正常",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "神经元特异性烯醇化酶\r\n13.2\r\nng/mL\r\n<16.3\r\n正常"
+      },
+      {
+        "label": "免疫组化设定",
+        "value": "TTF-1阳性、Napsin A阳性、CK7阳性、p40阴性",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "免疫组化设定：TTF-1阳性、Napsin A阳性、CK7阳性、p40阴性。"
+      },
+      {
+        "label": "模拟病理诊断",
+        "value": "（右肺上叶穿刺组织）腺癌，结合部位符合肺腺癌",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟病理诊断：（右肺上叶穿刺组织）腺癌，结合部位符合肺腺癌。"
+      },
+      {
+        "label": "检测设定",
+        "value": "EGFR外显子19缺失变异检出",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检测设定：EGFR外显子19缺失变异检出。"
+      },
+      {
+        "label": "PD-L1免疫组化",
+        "value": "肿瘤细胞阳性比例评分（TPS）10%",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "PD-L1免疫组化：肿瘤细胞阳性比例评分（TPS）10%。"
+      }
+    ],
+    "imaging": [
+      {
+        "label": "检查所见",
+        "value": "右肺上叶见约46 × 38 mm不规则软组织肿块，边缘分叶并见毛刺。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检查所见：右肺上叶见约46 × 38 mm不规则软组织肿块，边缘分叶并见毛刺。"
+      },
+      {
+        "label": "模拟结论",
+        "value": "右肺上叶占位，考虑恶性肿瘤；肺门及纵隔淋巴结可疑受累。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟结论：右肺上叶占位，考虑恶性肿瘤；肺门及纵隔淋巴结可疑受累。"
+      },
+      {
+        "label": "检查所见",
+        "value": "肝右叶见两处低密度灶，约18 mm及12 mm，增强后呈环形强化。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检查所见：肝右叶见两处低密度灶，约18 mm及12 mm，增强后呈环形强化。"
+      },
+      {
+        "label": "模拟结论",
+        "value": "结合肺部恶性肿瘤背景，肝内病灶可疑转移。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟结论：结合肺部恶性肿瘤背景，肝内病灶可疑转移。"
+      },
+      {
+        "label": "检查所见",
+        "value": "脑实质未设定异常强化结节，未见明显占位效应。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检查所见：脑实质未设定异常强化结节，未见明显占位效应。"
+      },
+      {
+        "label": "模拟结论",
+        "value": "本次模拟检查未设定明确颅内转移征象。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟结论：本次模拟检查未设定明确颅内转移征象。"
+      },
+      {
+        "label": "检查所见",
+        "value": "胸椎T8椎体及右侧髂骨见局灶性放射性摄取增高。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "检查所见：胸椎T8椎体及右侧髂骨见局灶性放射性摄取增高。"
+      },
+      {
+        "label": "模拟结论",
+        "value": "上述部位可疑骨转移，需结合局部CT或MRI进一步核实。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟结论：上述部位可疑骨转移，需结合局部CT或MRI进一步核实。"
+      }
+    ],
+    "notes": [
+      {
+        "label": "模拟数据",
+        "value": "模拟数据 · 仅供软件测试 · 非真实医疗文书",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "模拟数据 · 仅供软件测试 · 非真实医疗文书"
+      },
+      {
+        "label": "临床评估",
+        "value": "右肺门及纵隔淋巴结可疑受累；肝脏及骨骼存在可疑转移灶。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "三、临床评估：右肺门及纵隔淋巴结可疑受累；肝脏及骨骼存在可疑转移灶。"
+      },
+      {
+        "label": "伴随问题",
+        "value": "贫血表现、低白蛋白血症；具体原因仍待评估。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "四、伴随问题：贫血表现、低白蛋白血症；具体原因仍待评估。"
+      },
+      {
+        "label": "分子特征",
+        "value": "模拟EGFR外显子19缺失检出，PD-L1 TPS为10%。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "五、分子特征：模拟EGFR外显子19缺失检出，PD-L1 TPS为10%。"
+      },
+      {
+        "label": "特别声明",
+        "value": "此为软件测试用诊断书样例，不是用户本人的诊断。",
+        "sourceId": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+        "quote": "特别声明：此为软件测试用诊断书样例，不是用户本人的诊断。"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "12838d2e-7a7a-4128-88d0-7282898c0ae4",
+      "fileName": "QA_synthetic_cancer_reports.pdf",
+      "extractionStatus": "ready"
+    },
+    {
+      "id": "95403dcd-7687-496f-bbba-4e01cc8045ea",
+      "fileName": "onco-01.png",
+      "extractionStatus": "ready"
+    }
+  ],
+  "warnings": [
+    "onco-01.png: no verified facts were extracted; check the original.",
+    "4 unsupported fields were omitted. Check the originals."
+  ]
+}
