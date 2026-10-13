@@ -171,3 +171,16 @@
 09:24:10 [vite] (client) page reload src/components/UploadedReport.tsx
 09:24:10 [vite] (client) page reload src/lib/recognition.ts
 09:24:10 [vite] (client) page reload utils/supabase/info.tsx
+09:24:39 [vite] (client) page reload index.html
+09:24:39 [vite] (client) page reload src/App.tsx
+09:24:39 [vite] (client) hmr update /src/index.css
+09:24:39 [vite] (client) page reload src/main.tsx
+09:24:39 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+09:24:39 [vite] (client) page reload src/components/OriginalFile.tsx
+09:24:39 [vite] (client) page reload src/components/UploadedReport.tsx
+09:24:39 [vite] (client) page reload src/lib/recognition.ts
+09:24:39 [vite] (client) page reload utils/supabase/info.tsx
+09:25:47 [vite] (client) page reload src/components/UploadedReport.tsx
+09:25:47 [vite] (client) hmr update /src/index.css
+09:26:00 [vite] (client) page reload src/components/UploadedReport.tsx
+09:26:00 [vite] (client) hmr update /src/index.css
