@@ -1567,14 +1567,16 @@ textarea {
   }
 }
 
-/* AI entry points and generated content share one text color. */
+/* AI entry points retain their accent; assistant messages use normal green. */
 .ai-text,
-.button.ai-text,
+.button.ai-text {
+  color: #b42318;
+}
 .ai-message,
 .ai-message strong,
 .ai-message p,
 .ai-thinking {
-  color: #b42318;
+  color: #214e3b;
 }
 .ai-generated-content,
 .ai-generated-content h2,
@@ -1583,4 +1585,6 @@ textarea {
 .ai-generated-content summary {
   color: #214e3b;
 }
-.topbar .ai-title { color: #ff9b91; }
+.topbar .ai-title {
+  color: #6fa184;
+}
