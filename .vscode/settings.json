@@ -1,0 +1,6 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "deno.path": "C:/Users/刘思佳/AppData/Roaming/npm/node_modules/deno/deno.exe",
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.config": "supabase/functions/deno.json"
+}

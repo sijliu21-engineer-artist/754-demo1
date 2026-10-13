@@ -1,0 +1,11 @@
+{
+  "title": "ixds754",
+  "description": "Generates fully functional front-end applications ready for deployment, enabling developers to quickly create practical and usable apps with ease.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
