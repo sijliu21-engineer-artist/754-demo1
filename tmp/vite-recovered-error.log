@@ -28,3 +28,6 @@
 19:10:20 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
 19:12:22 [vite] (client) [console.error] [vite] TypeError: error loading dynamically imported module: http://localhost:8443/src/index.css?t=1791846742734
 19:12:22 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
+09:24:10 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
+09:24:10 [vite] (client) [console.error] [vite] TypeError: error loading dynamically imported module: http://localhost:8443/src/index.css?t=1791897850922
+09:24:10 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
