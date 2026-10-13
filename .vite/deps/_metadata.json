@@ -1,8 +1,44 @@
 {
-  "hash": "d3193682",
-  "configHash": "43612942",
-  "lockfileHash": "95956229",
-  "browserHash": "982aa418",
-  "optimized": {},
-  "chunks": {}
+  "hash": "2be93ca2",
+  "configHash": "e1780a46",
+  "lockfileHash": "cbbce2f5",
+  "browserHash": "088e8334",
+  "optimized": {
+    "pdfjs-dist": {
+      "src": "../../node_modules/.pnpm/pdfjs-dist@6.4.299/node_modules/pdfjs-dist/build/pdf.mjs",
+      "file": "pdfjs-dist.js",
+      "fileHash": "65b7071c",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/.pnpm/react-dom@19.2.4_react@19.2.4/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "44748b13",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/.pnpm/react@19.2.4/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "330f7bcf",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/.pnpm/react@19.2.4/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "d875e3c6",
+      "needsInterop": true
+    },
+    "tesseract.js": {
+      "src": "../../node_modules/.pnpm/tesseract.js@7.0.0/node_modules/tesseract.js/src/index.js",
+      "file": "tesseract__js.js",
+      "fileHash": "a26c479f",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-C5eH9lC8": {
+      "file": "chunk-C5eH9lC8.js",
+      "isDynamicEntry": false
+    }
+  }
 }

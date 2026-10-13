@@ -1,0 +1,10 @@
+{
+  "nodeModulesDir": "none",
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.window", "dom", "dom.iterable"]
+  },
+  "tasks": {
+    "check": "deno check server/index.tsx"
+  }
+}
