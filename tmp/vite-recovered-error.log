@@ -1,0 +1,30 @@
+19:08:49 [vite] Internal server error: [postcss] ENOENT: no such file or directory, open 'H:\IXDS754\IXDS754-Backend\node_modules\.pnpm\tailwindcss@4.2.2\node_modules\tailwindcss\index.css'
+  Plugin: vite:css
+  File: H:/IXDS754/IXDS754-Backend/src/index.css:undefined:NaN
+      at async open (node:internal/fs/promises:1345:25)
+      at async Object.readFile (node:internal/fs/promises:1996:14)
+      at async Object.load (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/node.js:20944:17)
+      at async loadImportContent (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/postcss-import.js:392:19)
+      at async Promise.all (index 0)
+      at async resolveImportId (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/postcss-import.js:378:20)
+      at async parseStyles (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/postcss-import.js:331:4)
+      at async Object.Once (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/postcss-import.js:455:20)
+      at async LazyResult.runAsync (H:\IXDS754\IXDS754-Backend\node_modules\.pnpm\postcss@8.5.23\node_modules\postcss\lib\lazy-result.js:299:11)
+      at async runPostCSS (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/vite@8.0.5_@types+node@22.19.17_jiti@2.6.1/node_modules/vite/dist/node/chunks/node.js:20998:19)
+19:08:49 [vite] (client) [console.error] [vite] TypeError: error loading dynamically imported module: http://localhost:8443/src/index.css?t=1791846529034
+19:08:49 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
+19:08:50 [vite] Internal server error: Cannot find module 'H:\IXDS754\IXDS754-Backend\node_modules\.pnpm\vite@8.0.5_@types+node@22.19.17_jiti@2.6.1\node_modules\vite\dist\node\chunks\dist.js' imported from H:\IXDS754\IXDS754-Backend\node_modules\.pnpm\vite@8.0.5_@types+node@22.19.17_jiti@2.6.1\node_modules\vite\dist\node\chunks\node.js
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at nextResolve (node:internal/modules/esm/hooks:785:28)
+      at o (file:///H:/IXDS754/IXDS754-Backend/node_modules/.pnpm/@tailwindcss+node@4.2.2/node_modules/@tailwindcss/node/dist/esm-cache.loader.mjs:1:69)
+      at nextResolve (node:internal/modules/esm/hooks:785:28)
+      at AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:30)
+      at MessagePort.handleMessage (node:internal/modules/esm/worker:251:24)
+      at [nodejs.internal.kHybridDispatch] (node:internal/event_target:848:20)
+      at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+19:10:20 [vite] (client) [console.error] [vite] TypeError: error loading dynamically imported module: http://localhost:8443/src/index.css?t=1791846620563
+19:10:20 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)
+19:12:22 [vite] (client) [console.error] [vite] TypeError: error loading dynamically imported module: http://localhost:8443/src/index.css?t=1791846742734
+19:12:22 [vite] (client) [console.error] [vite] Failed to reload /src/index.css. This could be due to syntax errors or importing non-existent modules. (see errors above)

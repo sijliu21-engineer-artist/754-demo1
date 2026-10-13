@@ -1,0 +1,155 @@
+
+  VITE v8.0.5  ready in 247 ms
+
+  ➜  Local:   http://localhost:8443/
+  ➜  Network: http://192.168.1.119:8443/
+  ➜  Network: http://43.249.193.140:8443/
+  ➜  press h + enter to show help
+19:01:03 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) page reload index.html
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) hmr update /src/App.tsx, /src/index.css
+19:01:03 [vite] (client) hmr update /src/index.css
+19:01:03 [vite] (client) page reload src/main.tsx
+19:01:03 [vite] (client) page reload src/vite-env.d.ts
+19:01:03 [vite] (client) page reload src/components/OriginalFile.tsx
+19:01:03 [vite] (client) page reload src/components/UploadedReport.tsx
+19:01:03 [vite] (client) page reload src/lib/recognition.ts
+19:01:03 [vite] (client) page reload supabase/config.toml
+19:01:03 [vite] (client) page reload supabase/functions/deno.json
+19:01:03 [vite] (client) page reload supabase/functions/server/auth_routes.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/chat_routes.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/index.ts
+19:01:03 [vite] (client) page reload supabase/functions/server/index.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/kv_store.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/record_routes.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/record_routes_test.ts
+19:01:03 [vite] (client) page reload supabase/functions/server/report_routes.tsx
+19:01:03 [vite] (client) page reload supabase/functions/server/report_routes_test.ts
+19:01:03 [vite] (client) page reload utils/supabase/info.tsx
+19:01:03 [vite] vite.config.ts changed, restarting server...
+19:01:03 [vite] (client) page reload tsconfig.json
+19:01:03 [vite] (client) page reload 本地使用说明.md
+19:01:03 [vite] (client) Re-optimizing dependencies because vite config has changed
+19:01:03 [vite] server restarted.
+19:04:16 [vite] (client) page reload index.html
+19:04:16 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:04:44 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:04:44 [vite] (client) page reload index.html
+19:07:47 [vite] (client) page reload index.html
+19:07:47 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:07:57 [vite] (client) ✨ new dependencies optimized: pdfjs-dist, react-dom/client, react, react/jsx-dev-runtime, tesseract.js
+19:07:57 [vite] (client) ✨ optimized dependencies changed. reloading
+19:08:49 [vite] (client) page reload src/components/UploadedReport.tsx
+19:08:49 [vite] (client) hmr update /src/index.css
+19:10:20 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:10:20 [vite] (client) page reload index.html
+19:10:20 [vite] (client) page reload src/App.tsx
+19:10:20 [vite] (client) page reload src/components/UploadedReport.tsx
+19:10:20 [vite] (client) page reload src/components/OriginalFile.tsx
+19:10:20 [vite] (client) hmr update /src/index.css
+19:10:20 [vite] (client) page reload src/main.tsx
+19:10:20 [vite] (client) page reload src/lib/recognition.ts
+19:10:20 [vite] (client) page reload utils/supabase/info.tsx
+19:10:42 [vite] (client) page reload index.html
+19:10:42 [vite] (client) page reload src/App.tsx
+19:10:42 [vite] (client) hmr update /src/index.css
+19:10:42 [vite] (client) page reload src/main.tsx
+19:10:42 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:10:42 [vite] (client) page reload src/components/OriginalFile.tsx
+19:10:42 [vite] (client) page reload src/components/UploadedReport.tsx
+19:10:42 [vite] (client) page reload src/lib/recognition.ts
+19:10:42 [vite] (client) page reload utils/supabase/info.tsx
+19:12:22 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:12:22 [vite] (client) page reload index.html
+19:12:22 [vite] (client) page reload src/App.tsx
+19:12:22 [vite] (client) page reload src/components/OriginalFile.tsx
+19:12:22 [vite] (client) page reload src/components/UploadedReport.tsx
+19:12:22 [vite] (client) hmr update /src/index.css
+19:12:22 [vite] (client) page reload src/main.tsx
+19:12:22 [vite] (client) page reload src/lib/recognition.ts
+19:12:22 [vite] (client) page reload utils/supabase/info.tsx
+19:17:53 [vite] (client) page reload index.html
+19:17:53 [vite] (client) page reload src/App.tsx
+19:17:53 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+19:17:53 [vite] (client) page reload src/components/OriginalFile.tsx
+19:17:53 [vite] (client) page reload src/components/UploadedReport.tsx
+19:17:53 [vite] (client) hmr update /src/index.css
+19:17:53 [vite] (client) page reload src/main.tsx
+19:17:53 [vite] (client) page reload src/lib/recognition.ts
+19:17:53 [vite] (client) page reload utils/supabase/info.tsx
+09:15:56 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+09:15:56 [vite] (client) page reload index.html
+09:15:56 [vite] (client) page reload src/App.tsx
+09:15:56 [vite] (client) page reload src/components/OriginalFile.tsx
+09:15:56 [vite] (client) page reload src/components/UploadedReport.tsx
+09:15:56 [vite] (client) hmr update /src/index.css
+09:15:56 [vite] (client) page reload src/main.tsx
+09:15:56 [vite] (client) page reload src/lib/recognition.ts
+09:15:56 [vite] (client) page reload utils/supabase/info.tsx
+09:17:47 [vite] (client) page reload index.html
+09:17:47 [vite] (client) page reload src/App.tsx
+09:17:47 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+09:17:47 [vite] (client) hmr update /src/index.css
+09:17:47 [vite] (client) page reload src/main.tsx
+09:17:47 [vite] (client) page reload src/components/OriginalFile.tsx
+09:17:47 [vite] (client) page reload src/components/UploadedReport.tsx
+09:17:47 [vite] (client) page reload src/lib/recognition.ts
+09:17:47 [vite] (client) page reload utils/supabase/info.tsx
+09:21:54 [vite] changed tsconfig file detected: H:/IXDS754/IXDS754-Backend/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+09:21:54 [vite] (client) page reload index.html
+09:21:54 [vite] (client) page reload src/App.tsx
+09:21:54 [vite] (client) page reload src/components/OriginalFile.tsx
+09:21:54 [vite] (client) page reload src/components/UploadedReport.tsx
+09:21:54 [vite] (client) hmr update /src/index.css
+09:21:54 [vite] (client) page reload src/main.tsx
+09:21:54 [vite] (client) page reload src/lib/recognition.ts
+09:21:54 [vite] (client) page reload utils/supabase/info.tsx
