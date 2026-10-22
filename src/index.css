@@ -1652,3 +1652,15 @@ textarea {
 .app-shell.has-nav .fixed-action { bottom: 66px; }
 
 .app-shell.has-nav.has-fixed-action { padding-bottom: 142px; }
+
+.indicator-search { display: block; width: 100%; margin-top: 8px; padding: 12px; border: 1px solid #d8e2d7; border-radius: 12px; background: #f5f8f2; }
+.indicator-table-wrap { overflow-x: auto; }
+.indicator-table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.indicator-table th, .indicator-table td { padding: 12px 8px; border-bottom: 1px solid #d8e2d7; vertical-align: top; }
+.indicator-chart { display: block; width: 100%; height: auto; color: #304d3b; fill: currentColor; }
+.indicator-confirm { display: flex; align-items: start; gap: 10px; font-size: 13px; }
+.indicator-quote { white-space: pre-wrap; overflow-wrap: anywhere; padding: 12px 0; }
+.indicator-history details summary { cursor: pointer; line-height: 1.6; }
+.indicator-history .card { min-width: 0; }
+
+.indicator-chart-scroll { width: 100%; overflow-x: auto; padding-bottom: 8px; }

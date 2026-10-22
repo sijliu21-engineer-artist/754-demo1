@@ -3,6 +3,7 @@ import { projectId, publicAnonKey } from "../utils/supabase/info";
 import { recognizeFile } from "./lib/recognition";
 import UploadedReport from "./components/UploadedReport";
 import OriginalFile from "./components/OriginalFile";
+import IndicatorHistory from "./components/IndicatorHistory";
 
 const A = "/assets";
 const icons = {
@@ -1530,26 +1531,11 @@ function Assistant({ back, nav }: { back: () => void; nav: Nav }) {
   );
 }
 
-function Compare({ table, back, nav }: { table?: boolean; back: () => void; nav: Nav }) {
-  return (
-    <AppShell
-      title={table ? "Compare results · Table" : "Compare past results"}
-      nav={nav}
-      active="compare"
-      back={back}
-      fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · {table ? "Find & explain" : "Explain this result"}</Button>}
-    >
-      <div className="content compare-content">
-        <Card><h2>Hemoglobin&nbsp; · &nbsp;g/L</h2><p>Selected: 06-26 and 07-06</p>{!table && <p className="caption">Year not recorded. Check the original lab report.</p>}<Button onClick={() => nav(table ? "chart" : "table")}>{table ? "Show trend chart" : "Show data table"}</Button></Card>
-        {table ? (
-          <Card><h2>Result comparison</h2><div className="result-table"><b>Date</b><b>Value</b><b>Unit</b><span>06-26</span><span>92</span><span>g/L</span><span>07-06</span><span>109</span><span>g/L</span></div><p className="subtle">Prototype reference range: 115–150 g/L.<br />Verify the reference range in each original report.</p><p className="caption">Year not recorded; no year has been assumed.</p><button className="text-button">View source records</button></Card>
-        ) : (
-          <Card><h2>Change between records</h2><div className="chart"><img src={icons.chart} alt="" /><span className="v92">92</span><span className="v109">109</span><span className="d1">06-26</span><span className="d2">07-06</span><span className="unit">g/L</span></div><p>The value rose from 92 to 109 g/L, an increase of 17 g/L. This alone does not indicate improvement or deterioration.</p></Card>
-        )}
-        {table ? <Card><h2>Next step</h2><p>Add “Which other tests are needed to interpret this result?” to your follow-up questions.</p><Button onClick={() => nav("details")}>Back to follow-up questions</Button></Card> : <Card><h2>View each record</h2><Button>06-26 · 92 g/L · View record</Button><Button>07-06 · 109 g/L · View record</Button><p className="caption">Before comparing, verify the indicator, unit, dates, and each report&apos;s reference range.</p></Card>}
-      </div>
-    </AppShell>
-  );
+function Compare({ back, nav }: { table?: boolean; back: () => void; nav: Nav }) {
+  return <AppShell title="Compare past" nav={nav} active="compare" back={back}
+    fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
+    <IndicatorHistory onUpload={() => nav("generate")} />
+  </AppShell>;
 }
 
 export default function App() {

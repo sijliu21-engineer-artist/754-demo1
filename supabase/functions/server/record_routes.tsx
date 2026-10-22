@@ -1,7 +1,7 @@
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 import type { Hono } from "npm:hono";
 import { resolveSession } from "./auth_routes.tsx";
-import * as kv from "./kv_store.tsx";
+import * as kv from "./data_store.tsx";
 
 const bucket = "casemate-records";
 const maxFileBytes = 8 * 1024 * 1024;

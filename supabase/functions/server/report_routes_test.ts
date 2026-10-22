@@ -1,4 +1,4 @@
-import { expandReportFiles, validateSections } from "./report_routes.tsx";
+import { expandReportFiles, validateSections, validateObservations } from "./report_routes.tsx";
 import type { MedicalRecord } from "./record_routes.tsx";
 
 const source: MedicalRecord = {
@@ -48,4 +48,19 @@ Deno.test("does not allow a completely unsupported generated report", () => {
   let failed = false;
   try { validateSections({ results: [{ ...fact, value: "999 g/L" }] }, [source]); } catch { failed = true; }
   assert(failed);
+});
+
+Deno.test("indicator index rejects invented values, units and cross-file evidence", () => {
+  const record = { ...source, extractedText: "Patient A 2026-06-26\nHemoglobin 92 g/L Reference 80-120" };
+  const row = { name: "Hemoglobin", valueText: "92", unit: "g/L", date: "2026-06-26", dateQuote: "Patient A 2026-06-26", patient: "Patient A", reference: "80-120", quote: "Hemoglobin 92 g/L Reference 80-120" };
+  const result = validateObservations({ results: [row, row, { ...row, valueText: "109" }, { ...row, unit: "mg/L" }, { ...row, patient: "Patient B" }, { ...row, valueText: "2" }] }, record, "batch-a");
+  assert(result.length === 1);
+  assert(result[0].date === "2026-06-26");
+  assert(result[0].recordId === "batch-a");
+});
+Deno.test("indicator index retains undated data without using upload dates", () => {
+  const row = { name: "Hemoglobin", valueText: "112", unit: "g/L", date: "2026-10-11", dateQuote: "", patient: "", reference: "", quote: "Hemoglobin 112 g/L." };
+  const result = validateObservations({ results: [row] }, source, source.id);
+  assert(result.length === 1);
+  assert(result[0].date === null);
 });
