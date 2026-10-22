@@ -52,6 +52,7 @@ type Page =
   | "table";
 
 type Nav = (page: Page) => void;
+type NavSection = "reports" | "assistant" | "compare" | "human" | "profile";
 
 type UploadedRecord = {
   id: string;
@@ -127,11 +128,11 @@ function Header({ title, back, action }: { title: string; back?: () => void; act
   );
 }
 
-function BottomNav({ active, nav }: { active: "reports" | "human" | "profile"; nav: Nav }) {
+function BottomNav({ active, nav }: { active: NavSection; nav: Nav }) {
   const items = [
     ["reports", "doc", "Reports", "generate"],
     ["assistant", "sparkle", "Ask AI", "assistant"],
-    ["compare", "chart", "Compare past results", "chart"],
+    ["compare", "chart", "Compare past", "chart"],
     ["human", "shield", "Human review", "human"],
     ["profile", "user", "Profile", "profile"],
   ] as const;
@@ -162,7 +163,7 @@ function AppShell({
   back?: () => void;
   action?: ReactNode;
   nav?: Nav;
-  active?: "reports" | "human" | "profile";
+  active?: NavSection;
   composer?: ReactNode;
   fixedAction?: ReactNode;
 }) {
@@ -1474,7 +1475,7 @@ function Assistant({ back, nav }: { back: () => void; nav: Nav }) {
   };
 
   return (
-    <AppShell title="Records assistant" back={back}>
+    <AppShell title="Records assistant" back={back} nav={nav} active="assistant">
       <div className="assistant-content">
         <p className="caption">Searching the medical records uploaded to your account</p>
         <div className="ai-message"><strong>✦ Records assistant</strong><p>Hi, I can find test results in your records or compare results across dates. What would you like to know?</p></div>
@@ -1533,6 +1534,8 @@ function Compare({ table, back, nav }: { table?: boolean; back: () => void; nav:
   return (
     <AppShell
       title={table ? "Compare results · Table" : "Compare past results"}
+      nav={nav}
+      active="compare"
       back={back}
       fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · {table ? "Find & explain" : "Explain this result"}</Button>}
     >

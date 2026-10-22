@@ -1646,3 +1646,9 @@ textarea {
 .topbar .ai-title {
   color: #6fa184;
 }
+
+/* Keep page actions above persistent bottom navigation. */
+.app-shell.has-nav .ai-composer,
+.app-shell.has-nav .fixed-action { bottom: 66px; }
+
+.app-shell.has-nav.has-fixed-action { padding-bottom: 142px; }
