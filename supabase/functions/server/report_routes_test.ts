@@ -1,4 +1,4 @@
-import { validateSections } from "./report_routes.tsx";
+import { expandReportFiles, validateSections } from "./report_routes.tsx";
 import type { MedicalRecord } from "./record_routes.tsx";
 
 const source: MedicalRecord = {
@@ -8,6 +8,19 @@ const source: MedicalRecord = {
 };
 const fact = { label: "Hemoglobin", value: "112 g/L", sourceId: "record-a", quote: "Hemoglobin 112 g/L." };
 const assert = (value: unknown) => { if (!value) throw new Error("Assertion failed"); };
+
+Deno.test("batch files retain separate evidence and source names", () => {
+  const files = ["01.pdf", "02.pdf"].map((fileName) => ({ fileName, mimeType: "application/pdf", size: 100, storagePath: fileName }));
+  const expanded = expandReportFiles([{ ...source, files, extractedText: "FILE 1: 01.pdf\nHemoglobin 92 g/L.\n\nFILE 2: 02.pdf\nHemoglobin 109 g/L." }]);
+  assert(expanded.length === 2);
+  assert(expanded[1].fileName === "02.pdf");
+  assert(!expanded[0].extractedText.includes("109"));
+  const result = validateSections({ results: [{ ...fact, value: "109 g/L", quote: "Hemoglobin 109 g/L.", sourceId: expanded[1].id }] }, expanded);
+  assert(result.sections.results[0].sourceId === expanded[1].id);
+  let failed = false;
+  try { expandReportFiles([{ ...source, files }]); } catch { failed = true; }
+  assert(failed);
+});
 
 Deno.test("concise summary caps results, removes duplicates and rejects long quotes", () => {
   const items = Array.from({ length: 20 }, (_, i) => ({ ...fact, label: `Test${i}`, value: `${i} g/L`, quote: `Test${i}: ${i} g/L.` }));

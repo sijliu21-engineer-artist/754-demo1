@@ -9,6 +9,21 @@ type Fact = { label: string; value: string; sourceId: string; quote: string };
 type Sections = Record<typeof sectionKeys[number], Fact[]>;
 const compact = (text: string) => text.replace(/\s+/g, "").toLowerCase();
 
+// Upload batches keep their original file boundaries in the recognized text.
+export function expandReportFiles(records: MedicalRecord[]): MedicalRecord[] {
+  return records.flatMap((record) => {
+    if (!record.files || record.files.length < 2) return [record];
+    const headers = [...record.extractedText.matchAll(/^FILE(?: \d+)?: (.+)\r?$/gm)];
+    if (headers.length !== record.files.length || headers.some((header, i) => header[1].trim() !== record.files![i].fileName)) {
+      throw new Error(`Cannot identify every file in ${record.fileName}. Recognize the original files again before generating.`);
+    }
+    return headers.map((header, i) => ({ ...record,
+      id: `${record.id}:file:${i + 1}`, fileName: record.files![i].fileName,
+      extractedText: record.extractedText.slice(header.index! + header[0].length, headers[i + 1]?.index).trim(),
+    }));
+  });
+}
+
 // Keep only values with a verbatim quote in a record owned by this account.
 export function validateSections(input: unknown, records: MedicalRecord[]) {
   if (!input || typeof input !== "object") throw new Error("Invalid structured report response.");
@@ -44,7 +59,7 @@ export function validateSections(input: unknown, records: MedicalRecord[]) {
 }
 
 async function revisionFor(records: MedicalRecord[]) {
-  const input = "concise-summary-v3:" + JSON.stringify(records.map((record) => [record.id, record.extractedText]).sort((a, b) => a[0].localeCompare(b[0])));
+  const input = "per-file-summary-v4:" + JSON.stringify(records.map((record) => [record.id, record.extractedText]).sort((a, b) => a[0].localeCompare(b[0])));
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
@@ -115,7 +130,8 @@ export function registerReportRoutes(app: Hono) {
       const recordId = c.req.query("recordId");
       const records = recordId ? allRecords.filter((record) => record.id === recordId) : allRecords;
       if (recordId && !records.length) return c.json({ error: "Record not found." }, 404);
-      const readable = records.filter((record) => record.extractedText.trim());
+      const files = expandReportFiles(records);
+      const readable = files.filter((record) => record.extractedText.trim());
       if (!readable.length) return c.json({ error: records.length ? "Recognize your uploaded images or scanned PDFs first." : "Upload a report before generating a summary." }, 422);
       if (readable.reduce((total, record) => total + record.extractedText.length, 0) > 120_000) {
         return c.json({ error: "The combined reports exceed the current summary limit. No files were silently omitted." }, 413);
@@ -126,6 +142,11 @@ export function registerReportRoutes(app: Hono) {
       if (saved?.revision === revision) return c.json({ report: saved });
       const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
       if (!apiKey) return c.json({ error: "The report service is not configured." }, 503);
+      const combined: Sections = { basic: [], treatment: [], results: [], imaging: [], notes: [] };
+      let rejected = 0;
+      const uncovered: string[] = [];
+      // Each file gets its own extraction so the first file cannot consume the entire summary budget.
+      for (const source of readable) {
       let completion;
       for (let attempt = 0; attempt < 2; attempt += 1) {
       const response = await fetch("https://api.deepseek.com/chat/completions", {
@@ -133,7 +154,7 @@ export function registerReportRoutes(app: Hono) {
         signal: AbortSignal.timeout(100_000),
         body: JSON.stringify({ model: "deepseek-chat", temperature: 0, max_tokens: 7000,
           response_format: { type: "json_object" },
-          messages: [{ role: "system", content: prompt + (attempt ? "\nRETRY: Return at most 10 facts TOTAL. Each value <=90 characters and quote <=140 characters. Choose only the most essential documented facts. Complete the JSON object." : "") }, { role: "user", content: JSON.stringify(readable.map((record) => ({ id: record.id, fileName: record.fileName, text: record.extractedText }))) }],
+          messages: [{ role: "system", content: prompt + (attempt ? "\nRETRY: Return at most 10 facts TOTAL. Each value <=90 characters and quote <=140 characters. Choose only the most essential documented facts. Complete the JSON object." : "") }, { role: "user", content: JSON.stringify([{ id: source.id, fileName: source.fileName, text: source.extractedText }]) }],
         }),
       });
       if (!response.ok) return c.json({ error: `The report service returned HTTP ${response.status}. Please retry later.` }, 502);
@@ -141,14 +162,23 @@ export function registerReportRoutes(app: Hono) {
       if (completion.choices?.[0]?.finish_reason !== "length") break;
       if (attempt === 1) throw new Error("The summary service could not finish a concise report. Please retry.");
       }
-      const validated = validateSections(JSON.parse(completion.choices?.[0]?.message?.content || "{}"), readable);
-      const coveredIds = new Set(sectionKeys.flatMap((key) => validated.sections[key].map((fact) => fact.sourceId)));
-      const report = { revision, summaryMode: "concise", generatedAt: new Date().toISOString(), sections: validated.sections,
-        sources: records.map(({ id, fileName, extractionStatus }) => ({ id, fileName, extractionStatus })),
+      const input = JSON.parse(completion.choices?.[0]?.message?.content || "{}");
+      let validated;
+      try { validated = validateSections(input, [source]); }
+      catch (error) {
+        if (error instanceof Error && error.message.startsWith("No source-supported facts")) { uncovered.push(source.fileName); continue; }
+        throw error;
+      }
+      rejected += validated.rejected;
+      for (const key of sectionKeys) combined[key].push(...validated.sections[key]);
+      }
+      if (!sectionKeys.some((key) => combined[key].length)) throw new Error("No source-supported facts could be extracted. Check the originals and retry.");
+      const report = { revision, summaryMode: "concise-per-file", generatedAt: new Date().toISOString(), sections: combined,
+        sources: files.map(({ id, fileName, extractionStatus }) => ({ id, fileName, extractionStatus })),
         warnings: [
-          ...records.filter((record) => !record.extractedText.trim()).map((record) => `${record.fileName}: no recognized text; excluded from summary.`),
-          ...readable.filter((record) => !coveredIds.has(record.id)).map((record) => `${record.fileName}: no verified facts were extracted; check the original.`),
-          ...(validated.rejected ? [`${validated.rejected} unsupported fields were omitted. Check the originals.`] : []),
+          ...files.filter((record) => !record.extractedText.trim()).map((record) => `${record.fileName}: no recognized text; excluded from summary.`),
+          ...uncovered.map((fileName) => `${fileName}: no verified facts were extracted; check the original.`),
+          ...(rejected ? [`${rejected} unsupported fields were omitted. Check the originals.`] : []),
         ],
       };
       await kv.set(reportKey, report);

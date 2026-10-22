@@ -11,8 +11,8 @@ type Report = {
 };
 const sections = [
   ["basic", "1. Basic information"], ["treatment", "2. Treatment history (timeline)"],
-  ["results", "3. Key results"], ["imaging", "4. Imaging & assessment"],
-  ["notes", "5. Notes to verify"],
+  ["results", "3. Key result history"], ["imaging", "4. Imaging & assessment"],
+  ["notes", "5. Follow-up questions & notes"],
 ] as const;
 
 async function request(path: string, options: RequestInit = {}) {
@@ -27,13 +27,16 @@ async function request(path: string, options: RequestInit = {}) {
   return result;
 }
 
-export default function UploadedReport({ onUpload, recordId }: { onUpload: () => void; recordId?: string }) {
+export default function UploadedReport({ onUpload, onSources, recordId }: { onUpload: () => void; onSources: () => void; recordId?: string }) {
   const reportPath = recordId ? `report?recordId=${encodeURIComponent(recordId)}` : "report";
   const [report, setReport] = useState<Report | null>(null);
   const [pending, setPending] = useState<Array<{ id: string; fileName: string }>>([]);
   const [error, setError] = useState("");
   const [progress, setProgress] = useState("Loading your saved report…");
   const [busy, setBusy] = useState(true);
+  const [showAllWarnings, setShowAllWarnings] = useState(false);
+  const [reviewItem, setReviewItem] = useState<string | null>(null);
+  const confirmationItems = report ? [...new Set([...report.warnings, ...(report.sections.notes || []).map((fact) => `${fact.label}: ${fact.value}`)])] : [];
   const active = useRef(true);
 
   const generate = async () => {
@@ -98,11 +101,17 @@ export default function UploadedReport({ onUpload, recordId }: { onUpload: () =>
     }
   };
 
-  return <div className="content">
+  return <div className="content generated-report">
     <section className="card">
-      <h2>Your medical summary</h2>
+      <div className="report-heading">
+        <svg className="generated-report-icon" width="34" height="40" viewBox="0 0 34 40" fill="none" aria-hidden="true"><path d="M6 2h15l9 9v27H6V2Z" stroke="currentColor" strokeWidth="3" /><path d="M21 2v10h9M11 20h13M11 27h13" stroke="currentColor" strokeWidth="3" /></svg>
+        <div><h2>{report?.sources.length === 1 ? report.sources[0].fileName : "Your medical summary"}</h2>
+          {report && <small>{new Date(report.generatedAt).toLocaleString()} · {report.sources.length} upload record(s)</small>}
+        </div>
+        {report && <button className="button compact" onClick={onSources}>Originals</button>}
+      </div>
       <p className="caption">Key diagnoses, treatment and selected test results from your uploads. This summary does not list every result. View the complete originals in Uploaded files.</p>
-      {report && <p className="caption">{report.sources.length} upload record(s) · Generated {new Date(report.generatedAt).toLocaleString()}</p>}
+      {report && <p className="notice">{report.warnings.length ? `${report.warnings.length} item(s) to confirm. Check them against the originals below.` : "Keep the original reports available when checking this summary."}</p>}
       {progress && <p role="status" aria-live="polite">{progress}</p>}
       {error && <p className="chat-error" role="alert">{error}</p>}
       {pending.length > 0 && <>
@@ -115,16 +124,33 @@ export default function UploadedReport({ onUpload, recordId }: { onUpload: () =>
         <button className="button" onClick={onUpload}>Upload a report</button>
       </>}
     </section>
-    {report?.warnings.length ? <section className="card confirm-card"><h2>Items to verify</h2>{report.warnings.map((warning, i) => <p className="notice" key={i}>{warning}</p>)}</section> : null}
+    {report && <section className="card confirm-card">
+      <h2>{confirmationItems.length ? `${confirmationItems.length} ${confirmationItems.length === 1 ? "item" : "items"} to confirm` : "Review & confirmation"}</h2>
+      <p className="subtle">Uncertain values are retained as recorded. Compare them with the original files before using this summary.</p>
+      {!confirmationItems.length && <p className="uncertain">No specific uncertainty was flagged in the saved summary. This does not mean every field has been verified.</p>}
+      {confirmationItems.slice(0, showAllWarnings ? undefined : 2).map((warning, i) => <div className="uncertain" key={i}>
+        <p>{warning}</p><div className="two-buttons"><button className="button" onClick={onSources}>Check original</button><button className="button" onClick={() => setReviewItem(warning)}>Human review</button></div>
+      </div>)}
+      {confirmationItems.length > 2 && <button className="muted-link" aria-expanded={showAllWarnings} onClick={() => setShowAllWarnings(!showAllWarnings)}>{showAllWarnings ? "Show fewer items" : `Show ${confirmationItems.length - 2} more items`} ›</button>}
+      <button className="button primary" onClick={() => setReviewItem("Review the complete generated report")}>Review all items · Human review</button>
+    </section>}
+    {reviewItem !== null && <section className="card" role="dialog" aria-modal="false" aria-labelledby="human-review-title">
+      <h2 id="human-review-title">Human review</h2><p>{reviewItem}</p>
+      <p className="caption">Human review is not connected to a reviewer or payment service yet. No request has been submitted and no payment is required.</p>
+      <button autoFocus className="button" onClick={onSources}>View original files</button><button className="button" onClick={() => setReviewItem(null)}>Close</button>
+    </section>}
     {report && sections.map(([key, title]) => <section className="card ai-generated-content" key={key}>
       <h2>{title}</h2>
+      {key === "notes" && <p className="caption">Points from your records to discuss at your next appointment.</p>}
       {report.sections[key]?.length ? report.sections[key].map((fact, i) => <div className="report-metric" key={i}>
         <small>{fact.label}</small><p style={{ whiteSpace: "pre-wrap" }}>{fact.value}</p>
-        {key === "results" && <p className="caption">{fact.quote.replace(/\s*\r?\n\s*/g, " · ")}</p>}
         <small>Source: {report.sources.find((source) => source.id === fact.sourceId)?.fileName || "Unknown source"}</small>
         <details><summary>View recognized source text</summary><p style={{ whiteSpace: "pre-wrap" }}>{fact.quote}</p></details>
       </div>) : <p className="subtle">Not provided in the uploaded reports.</p>}
     </section>)}
-    {report && <section className="card ai-generated-content"><h2>Source files</h2>{report.sources.map((source) => <p key={source.id}>{source.fileName}</p>)}<p className="caption">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
+    {report && <section className="card ai-generated-content"><h2>Imaging & source files</h2><p className="caption">Original documents and imaging reports linked to this summary</p>{report.sources.map((source) => {
+      const count = Object.values(report.sections).flat().filter((fact) => fact.sourceId === source.id).length;
+      return <div className="generated-source-name" key={source.id}><p>{source.fileName}</p><small>{count ? `${count} cited item(s)` : "No cited items — check this original for omitted information"}</small></div>;
+    })}<button className="button" onClick={onSources}>View original files →</button><button className="button" disabled={busy} onClick={generate}>Check / regenerate summary</button><button className="button" onClick={onUpload}>Upload additional records</button><p className="caption">AI-organized record extracts, not a new diagnosis. OCR can misread numbers and units.</p></section>}
   </div>;
 }

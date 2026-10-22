@@ -130,14 +130,16 @@ function Header({ title, back, action }: { title: string; back?: () => void; act
 function BottomNav({ active, nav }: { active: "reports" | "human" | "profile"; nav: Nav }) {
   const items = [
     ["reports", "doc", "Reports", "generate"],
+    ["assistant", "sparkle", "Ask AI", "assistant"],
+    ["compare", "chart", "Compare past results", "chart"],
     ["human", "shield", "Human review", "human"],
     ["profile", "user", "Profile", "profile"],
   ] as const;
   return (
     <nav className="bottom-nav">
       {items.map(([id, icon, label, page]) => (
-        <button className={active === id ? "active" : ""} onClick={() => nav(page)} key={id}>
-          <Icon name={icon} />
+        <button className={active === id ? "active" : ""} aria-label={label} aria-current={active === id ? "page" : undefined} onClick={() => nav(page)} key={id}>
+          {id === "compare" ? <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 3v17h17M7 15l4-5 4 3 5-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg> : <Icon name={icon} />}
           <span>{label}</span>
         </button>
       ))}
@@ -1304,7 +1306,7 @@ function Medical({ back, nav }: { back: () => void; nav: Nav }) {
 function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => void; nav: Nav; uploaded?: boolean; recordId?: string }) {
   if (uploaded) return (
     <AppShell title="Medical report" back={back} fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
-      <UploadedReport key={recordId || "combined"} recordId={recordId} onUpload={() => nav("generate")} />
+      <UploadedReport key={recordId || "combined"} recordId={recordId} onUpload={() => nav("generate")} onSources={() => nav("uploaded")} />
     </AppShell>
   );
   return (
