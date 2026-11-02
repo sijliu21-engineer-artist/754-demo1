@@ -13,3 +13,5 @@ test image/
 Thumbs.db
 supabase/.temp/
 supabase/.branches/
+
+.vercel/

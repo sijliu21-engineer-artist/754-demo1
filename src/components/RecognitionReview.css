@@ -1,0 +1,77 @@
+.recognition-review-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgb(20 38 28 / 55%); overflow-y: auto; padding: 20px; }
+.recognition-review-dialog { width: min(1100px, 100%); margin: 0 auto; background: #fcfffb; color: #203328; border-radius: 20px; padding: 24px; box-shadow: 0 16px 70px rgb(0 0 0 / 20%); display: flex; flex-direction: column; gap: 18px; outline: none; }
+.recognition-review-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.recognition-review-header h2 { margin: 2px 0 0; }
+.recognition-review-header .button { width: auto; flex-shrink: 0; }
+.recognition-review-notice { background: #f5efd9; border: 1px solid #e5ddbc; border-radius: 14px; padding: 14px; line-height: 1.6; margin: 0; }
+.recognition-review-dialog h3 { margin: 0; font-size: 17px; }
+.recognition-review-dialog h4 { margin: 0; font-size: 16px; }
+.recognition-review-dialog select, .recognition-review-dialog textarea, .recognition-review-dialog input:not([type="checkbox"]) { width: 100%; padding: 12px; color: #203328; background: white; border: 1px solid #b7c8b9; border-radius: 10px; font: inherit; }
+.recognition-review-dialog textarea { resize: vertical; min-height: 120px; font-family: ui-monospace, monospace; line-height: 1.6; white-space: pre-wrap; }
+.recognition-review-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.recognition-review-original, .recognition-review-editor { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.recognition-review-original { position: sticky; top: 12px; }
+.recognition-review-original img { display: block; width: 100%; height: auto; border: 1px solid #d8e2d7; cursor: zoom-in; }
+.recognition-review-original object { width: 100%; height: 65vh; border: 1px solid #d8e2d7; }
+
+/* report switcher */
+.rr-files { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.rr-file { flex: 0 0 auto; max-width: 260px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 14px; border-radius: 12px; border: 1px solid #d8e2d7; background: white; color: #203328; font: inherit; text-align: left; cursor: pointer; }
+.rr-file.is-current { border-color: #214e3b; box-shadow: inset 0 0 0 1px #214e3b; background: #edf3eb; }
+.rr-file-name { font-weight: 600; font-size: 14px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rr-file-status { font-size: 13px; color: #9a5b12; }
+.rr-file.is-clear .rr-file-status { color: #2f6b45; }
+
+/* highlights over the original image */
+.rr-original-frame { position: relative; }
+.rr-highlight { position: absolute; border: 2px solid #d9822b; background: rgb(217 130 43 / 12%); border-radius: 4px; pointer-events: none; transition: background .15s, border-color .15s; }
+.rr-highlight b { position: absolute; right: -12px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: #d9822b; color: white; font-size: 12px; display: grid; place-items: center; }
+.rr-highlight.is-active { border-width: 3px; background: rgb(217 130 43 / 24%); }
+.rr-highlight.is-done { border-color: #3f8a5a; background: rgb(63 138 90 / 10%); }
+.rr-highlight.is-done b { background: #3f8a5a; }
+
+/* issue cards */
+.rr-issue { display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 14px; background: #fbf6e8; border: 1px solid #ecdcb4; }
+.rr-issue.is-active { border-color: #d9822b; }
+.rr-issue.is-done { background: #f1f7ef; border-color: #c6dcc8; }
+.rr-issue-head { display: flex; gap: 12px; align-items: flex-start; }
+.rr-marker { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #d9822b; color: white; font-weight: 700; font-size: 14px; }
+.rr-issue.is-done .rr-marker { background: #3f8a5a; }
+.rr-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.rr-chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #f2e2bd; color: #6d4a0f; }
+.rr-chip-inconsistent, .rr-chip-implausible { background: #f6d9cf; color: #7d3324; }
+.rr-chip-missing, .rr-chip-unreadable { background: #e7dcef; color: #4e3466; }
+.rr-crop { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid #e0d6bd; background: white; }
+.rr-read { margin: 0; }
+.rr-reasons { margin: 0; padding-left: 18px; line-height: 1.55; color: #3c5345; }
+.rr-reasons li + li { margin-top: 4px; }
+.rr-expected { margin: 0; padding: 8px 12px; border-radius: 10px; background: white; border: 1px dashed #c9b98f; }
+.rr-field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.rr-input-row { display: flex; gap: 8px; align-items: center; }
+.rr-input-row input { flex: 1; min-width: 0; }
+.rr-input-row select { width: auto; flex: 0 0 auto; }
+.rr-unit { flex: 0 0 auto; color: #596e60; font-weight: 600; }
+.rr-hint { color: #9a5b12; }
+.rr-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.rr-action { padding: 8px 12px; border-radius: 999px; border: 1px solid #b7cbb8; background: white; color: #214e3b; font: inherit; font-size: 14px; cursor: pointer; }
+.rr-action.is-selected { background: #214e3b; border-color: #214e3b; color: white; }
+.rr-remove { color: #923a31; border-color: #d8bcb5; }
+.rr-remove.is-selected { background: #923a31; border-color: #923a31; color: white; }
+.rr-sub { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px dashed #e0cf9f; }
+.rr-clear { margin: 0; padding: 16px; border-radius: 14px; background: #edf3eb; color: #2f6b45; font-weight: 600; }
+.rr-advanced { border-top: 1px solid #d8e2d7; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.rr-advanced summary { cursor: pointer; color: #596e60; }
+.rr-advanced[open] { gap: 10px; }
+.rr-advanced > * + * { margin-top: 10px; }
+.recognition-review-dialog .recognition-review-check { display: flex; flex-direction: row; align-items: start; gap: 8px; line-height: 1.6; padding: 14px; border-radius: 12px; background: #edf3eb; font-size: 14px; }
+.recognition-review-check input { margin-top: 5px; flex-shrink: 0; }
+.recognition-review-footer { display: flex; gap: 12px; padding-top: 16px; border-top: 1px solid #d8e2d7; position: sticky; bottom: -24px; background: #fcfffb; padding-bottom: 4px; }
+.recognition-review-footer .button { flex: 1; }
+.recognition-review-dialog button:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 700px) {
+  .recognition-review-backdrop { padding: 8px; }
+  .recognition-review-dialog { padding: 16px; border-radius: 14px; }
+  .recognition-review-columns { grid-template-columns: minmax(0, 1fr); }
+  .recognition-review-original { position: static; }
+  .recognition-review-footer { flex-direction: column-reverse; bottom: -16px; }
+}

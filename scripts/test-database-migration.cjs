@@ -1,0 +1,33 @@
+const fs=require('node:fs');
+const {PGlite}=require(require.resolve('@electric-sql/pglite', { paths: [require('node:path').join(process.cwd(), 'tmp', 'db-migration-test')] }));
+(async()=>{
+ const db=new PGlite();
+ await db.exec('create role anon; create role authenticated; create role service_role bypassrls; create table public.kv_store_ba71e98d(key text primary key,value jsonb not null);');
+ const account={username:'test_a',displayName:'Test A',salt:'existing-salt',passwordHash:'existing-hash',createdAt:'2026-10-22T00:00:00.000Z'};
+ const upload={id:'u1',username:'test_a',fileName:'two files',mimeType:'image/png',size:100,storagePath:'a/first.png',extractedText:'Hemoglobin 112 g/L',extractionStatus:'ready',createdAt:'2026-10-22T00:00:00.000Z',files:[{fileName:'01.png',mimeType:'image/png',size:50,storagePath:'a/01.png'},{fileName:'02.png',mimeType:'image/png',size:50,storagePath:'a/02.png'}]};
+ const observations={revision:'r1',warnings:[],observations:[{name:'Hemoglobin',value:112,valueText:'112',unit:'g/L',date:'2026-06-26',patient:'A',reference:'100-150',sourceId:'u1:file:1',recordId:'u1',fileName:'01.png',mimeType:'image/png',quote:'Hemoglobin 112 g/L'}]};
+ const fixtures=[['auth:user:test_a',account],['auth:session:token-for-test',{username:'test_a',displayName:'Test A',expiresAt:1900000000000}],['records:test_a:u1',upload],['observations:test_a:u1',observations],['report:test_a:u1',{revision:'r1',generatedAt:'2026-10-22T00:00:00.000Z',sections:{results:[]},sources:[],warnings:[]}],['auth:demo-seed-version',1]];
+ for(const [key,value]of fixtures)await db.query('insert into kv_store_ba71e98d values($1,$2)',[key,JSON.stringify(value)]);
+ const sql=fs.readFileSync('supabase/migrations/202610220001_split_business_tables.sql','utf8');
+ await db.exec(sql);
+ const get=async key=>(await db.query('select casemate_read_entry($1) as value',[key])).rows[0].value;
+ const assert=(condition,message)=>{if(!condition)throw Error(message);};
+ assert((await get('auth:user:test_a')).passwordHash===account.passwordHash,'hash changed');
+ assert((await get('auth:session:token-for-test')).expiresAt===1900000000000,'session lost');
+ assert((await get('observations:test_a:u1')).observations[0].date==='2026-06-26','chart date lost');
+ assert((await db.query('select count(*)::int as n from uploaded_files')).rows[0].n===2,'file count');
+ assert((await db.query('select count(*)::int as n from kv_store_ba71e98d')).rows[0].n===6,'backup altered');
+ console.log('PASS backfill accounts/password hashes, sessions, uploads, individual files, reports, chart measurements; old KV unchanged');
+ await db.exec(sql);console.log('PASS migration rerun is idempotent');
+ const scan=await db.query("select casemate_scan_entries('records:test_%:') as value");assert(scan.rows[0].value.length===0,'wildcard prefix leaked');
+ await db.exec('set role service_role');assert((await get('records:test_a:u1')).id==='u1','service read failed');await db.exec('reset role');console.log('PASS exact prefix and backend role access');
+ await db.exec('set role anon');let denied=false;try{await db.query('select * from password_credentials');}catch{denied=true;}assert(denied,'anon can read passwords');await db.exec('reset role');
+ await db.exec('set role authenticated');denied=false;try{await get('auth:user:test_a');}catch{denied=true;}assert(denied,'browser can call credential RPC');await db.exec('reset role');console.log('PASS anon and authenticated cannot read credentials or execute server-only RPC');
+ const bad={...observations,observations:[{...observations.observations[0],recordId:'other-user-upload'}]};
+ let failed=false;try{await db.query('select casemate_write_entry($1,$2)',['observations:test_a:u1',JSON.stringify(bad)]);}catch{failed=true;}
+ assert(failed,'invalid owner accepted');assert((await get('observations:test_a:u1')).observations.length===1,'failed transaction destroyed chart');console.log('PASS cross-upload rejection and atomic rollback');
+ await db.query('select casemate_write_entry($1,$2)',['records:test_a:u1',JSON.stringify({...upload,extractedText:'Updated OCR'})]);
+ assert(await get('observations:test_a:u1')===null,'stale chart cache retained');console.log('PASS OCR changes invalidate outdated chart data');
+ await db.query("select casemate_delete_entry('auth:session:token-for-test')");assert(await get('auth:session:token-for-test')===null,'expired session retained');console.log('PASS session expiry deletion');
+ await db.close();
+})().catch(error=>{console.error(error);process.exit(1);});

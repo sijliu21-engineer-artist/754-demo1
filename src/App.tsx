@@ -1,27 +1,29 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { projectId, publicAnonKey } from "../utils/supabase/info";
-import { recognizeFile } from "./lib/recognition";
+import { recognizeFileDetailed } from "./lib/recognition";
+import { useRecognitionReview, type RecognizedUpload } from "./components/RecognitionReview";
 import UploadedReport from "./components/UploadedReport";
 import OriginalFile from "./components/OriginalFile";
+import IndicatorHistory from "./components/IndicatorHistory";
 
 const A = "/assets";
 const icons = {
-  camera: `${A}/160dc.svg`,
-  user: `${A}/1f5da.svg`,
-  shield: `${A}/e8cf9.svg`,
-  doc: `${A}/86153.svg`,
-  edit: `${A}/ca813.svg`,
-  upload: `${A}/97a4b.svg`,
+  camera: `${A}/v3/camera.svg`,
+  user: `${A}/v3/user.svg`,
+  shield: `${A}/v3/shield.svg`,
+  doc: `${A}/v3/doc.svg`,
+  edit: `${A}/v3/edit.svg`,
+  upload: `${A}/v3/upload.svg`,
   image: `${A}/7dd0c.svg`,
-  logo: `${A}/12ad7.svg`,
-  sparkle: `${A}/36cf3.svg`,
-  lock: `${A}/95bef.svg`,
-  secure: `${A}/339d8.svg`,
+  logo: `${A}/v3/logo.svg`,
+  sparkle: `${A}/v3/sparkle.svg`,
+  lock: `${A}/v3/lock.svg`,
+  secure: `${A}/v3/secure.svg`,
   check: `${A}/5f0ce.svg`,
   crown: `${A}/9d545.svg`,
   hospital: `${A}/2082c.svg`,
   report: `${A}/1804f.svg`,
-  chart: `${A}/e30bd.svg`,
+  chart: `${A}/v3/chart.svg`,
   pdf: `${A}/a1b7a.svg`,
   qr: `${A}/c2702.png`,
 };
@@ -52,6 +54,7 @@ type Page =
   | "table";
 
 type Nav = (page: Page) => void;
+type NavSection = "reports" | "assistant" | "compare" | "human" | "profile";
 
 type UploadedRecord = {
   id: string;
@@ -80,7 +83,7 @@ const encodeFile = async (file: File) => {
 };
 
 function Icon({ name, size = 24 }: { name: keyof typeof icons; size?: number }) {
-  return <img className="icon" src={icons[name]} width={size} height={size} alt="" />;
+  return <span className="icon" style={{ width: size, height: size }}><img src={icons[name]} alt="" /></span>;
 }
 
 function Button({
@@ -116,6 +119,7 @@ function Card({ children, className = "" }: { children: ReactNode; className?: s
 function Header({ title, back, action }: { title: string; back?: () => void; action?: ReactNode }) {
   return (
     <header className="topbar">
+      <span className="header-brand" aria-hidden="true">CaseMate<span>YOUR RECORDS, TOGETHER</span></span>
       {back && (
         <button className="back" onClick={back}>
           ‹ Back
@@ -127,17 +131,19 @@ function Header({ title, back, action }: { title: string; back?: () => void; act
   );
 }
 
-function BottomNav({ active, nav }: { active: "reports" | "human" | "profile"; nav: Nav }) {
+function BottomNav({ active, nav }: { active: NavSection; nav: Nav }) {
   const items = [
     ["reports", "doc", "Reports", "generate"],
+    ["assistant", "sparkle", "Ask AI", "assistant"],
+    ["compare", "chart", "Compare past", "chart"],
     ["human", "shield", "Human review", "human"],
     ["profile", "user", "Profile", "profile"],
   ] as const;
   return (
-    <nav className="bottom-nav">
+    <nav className="bottom-nav" aria-label="Main navigation">
       {items.map(([id, icon, label, page]) => (
-        <button className={active === id ? "active" : ""} onClick={() => nav(page)} key={id}>
-          <Icon name={icon} />
+        <button className={active === id ? "active" : ""} aria-label={label} aria-current={active === id ? "page" : undefined} onClick={() => nav(page)} key={id}>
+          <Icon name={icon} size={20} />
           <span>{label}</span>
         </button>
       ))}
@@ -160,14 +166,14 @@ function AppShell({
   back?: () => void;
   action?: ReactNode;
   nav?: Nav;
-  active?: "reports" | "human" | "profile";
+  active?: NavSection;
   composer?: ReactNode;
   fixedAction?: ReactNode;
 }) {
   return (
     <main className={`app-shell ${nav ? "has-nav" : ""} ${composer ? "has-composer" : ""} ${fixedAction ? "has-fixed-action" : ""}`}>
       <Header title={title} back={back} action={action} />
-      <div className="page-scroll">{children}</div>
+      <div className="page-scroll" key={title}>{children}</div>
       {composer}
       {fixedAction && <div className="fixed-action">{fixedAction}</div>}
       {nav && active && <BottomNav active={active} nav={nav} />}
@@ -242,7 +248,7 @@ function Stepper({ complete = false }: { complete?: boolean }) {
   );
 }
 
-function Composer({ onSend }: { onSend?: (message: string) => void }) {
+function Composer({ onSend, onAddPhoto }: { onSend?: (message: string) => void; onAddPhoto?: () => void }) {
   const [message, setMessage] = useState("");
   const [sentMessage, setSentMessage] = useState("");
 
@@ -272,8 +278,8 @@ function Composer({ onSend }: { onSend?: (message: string) => void }) {
           sendMessage();
         }}
       >
-        <button className="composer-camera" type="button" aria-label="Add a photo">
-          <Icon name="camera" />
+        <button className="composer-camera" type="button" aria-label="Add a photo" onClick={onAddPhoto}>
+          <span aria-hidden="true">＋</span>
         </button>
         <input
           aria-label="Health details"
@@ -282,10 +288,10 @@ function Composer({ onSend }: { onSend?: (message: string) => void }) {
             setMessage(event.target.value);
             if (sentMessage) setSentMessage("");
           }}
-          placeholder="Add health details (diagnosis date, medications)…"
+          placeholder="Enter health details or add a record…"
         />
-        <button className="button primary composer-send" type="submit" disabled={!message.trim()}>
-          Send
+        <button className="composer-send" aria-label="Send health details" type="submit" disabled={!message.trim()}>
+          ↑
         </button>
       </form>
     </>
@@ -297,7 +303,7 @@ function AuthBrand() {
     <>
       <div className="brand">
         <div className="brand-logo">
-          <Icon name="logo" size={40} />
+          <Icon name="logo" size={32} />
         </div>
         <h1>CaseMate</h1>
         <p>Your cancer case records, organised and private.</p>
@@ -525,6 +531,7 @@ function UploadConfirmation({
 }
 
 function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: string) => void; onUploaded: (recordId: string) => void }) {
+  const { reviewRecognitions, reviewDialog } = useRecognitionReview();
   const picker = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -541,14 +548,21 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
     setUploading(true);
     setUploadError("");
     try {
+      const recognized: RecognizedUpload[] = [];
+      for (const [index, file] of files.entries()) {
+        const recognition = await recognizeFileDetailed(file, (message) => setUploadProgress(`${index + 1}/${files.length} · ${file.name}: ${message}`));
+        recognized.push({ file, recognition });
+      }
+      setUploadProgress("Check scanned reports and confirm their values before saving…");
+      const verifiedTexts = await reviewRecognitions(recognized);
       const payloadFiles = [];
       for (const [index, file] of files.entries()) {
-        const [base64, extractedText] = await Promise.all([
-          encodeFile(file), recognizeFile(file, (message) => setUploadProgress(`${index + 1}/${files.length} · ${file.name}: ${message}`)),
-        ]);
+        const extractedText = verifiedTexts[index];
+        if (!extractedText.trim()) throw new Error(`No verified text is available for ${file.name}.`);
+        const base64 = await encodeFile(file);
         payloadFiles.push({ fileName: file.name, mimeType: file.type || (file.name.toLowerCase().endsWith(".pdf") ? "application/pdf" : "image/png"), size: file.size, base64, extractedText });
       }
-      setUploadProgress("Saving all originals as one upload…");
+      setUploadProgress("Review complete · Saving your choices and original files…");
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-ba71e98d/records`,
         {
@@ -575,20 +589,16 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
       action={<button onClick={() => nav("settings")}>Privacy</button>}
       nav={nav}
       active="reports"
-      composer={<Composer onSend={onSend} />}
+      composer={<Composer onSend={onSend} onAddPhoto={() => picker.current?.click()} />}
     >
-      <div className="content">
+      {reviewDialog}
+      <div className="content dashboard-content">
+        <section className="dashboard-intro"><div><h2>Your medical records</h2><p>Upload, find results, and compare.</p></div></section>
         <Stepper />
-        <Card>
-          <p className="intro">
-            Hi, I&apos;m your medical records assistant. Upload photos or PDFs of discharge
-            summaries, lab results, or imaging reports, or enter details manually. I&apos;ll
-            redact personal information and create a Word report.
-          </p>
-        </Card>
-        <Card>
-          <h2>Quick start</h2>
-          <p className="subtle">Choose how to import your medical records</p>
+        <Card className="upload-card">
+          
+          <h2>Start with your records</h2>
+          <p className="subtle">Add photos or PDFs together in one upload.</p>
           <div className="import-grid">
             <button onClick={() => picker.current?.click()}><Icon name="camera" />Take a photo</button>
             <button onClick={() => picker.current?.click()}><Icon name="upload" />Photos / PDF</button>
@@ -621,17 +631,22 @@ function Generate({ nav, onSend, onUploaded }: { nav: Nav; onSend: (message: str
               error={uploadError}
             />
           )}
-          {uploading && <p className="caption" role="status" aria-live="polite">{uploadProgress}</p>}
+          {uploading && <div className="upload-status" role="status" aria-live="polite"><span className="activity-indicator" aria-hidden="true" /><p className="caption">{uploadProgress}</p></div>}
           <p className="caption">
-            Enable automatic redaction in Privacy settings to mask names, ID numbers, and
-            hospital IDs. You can also choose a privacy level.
+            Enable automatic redaction in Privacy settings to mask names, ID numbers and hospital IDs.
           </p>
         </Card>
-        <Card>
-          <h2>Ask AI&nbsp; · &nbsp;Find test results</h2>
-          <p>For example: Is hemoglobin in my records? What is the value?</p>
-          <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI / Find a result</Button>
-          <Button onClick={() => nav("chart")}>Compare past results</Button>
+        <Card className="assistant-entry">
+          
+          <h2>Ask your records</h2>
+          
+          <Button className="ai-text" onClick={() => nav("assistant")}>Ask AI <span aria-hidden="true">↗</span></Button>
+        </Card>
+        <Card className="compare-entry">
+          
+          <h2>Compare past results</h2>
+          
+          <Button onClick={() => nav("chart")}>Compare Past →</Button>
         </Card>
       </div>
     </AppShell>
@@ -1304,7 +1319,7 @@ function Medical({ back, nav }: { back: () => void; nav: Nav }) {
 function ReportDetails({ back, nav, uploaded = false, recordId }: { back: () => void; nav: Nav; uploaded?: boolean; recordId?: string }) {
   if (uploaded) return (
     <AppShell title="Medical report" back={back} fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
-      <UploadedReport key={recordId || "combined"} recordId={recordId} onUpload={() => nav("generate")} />
+      <UploadedReport key={recordId || "combined"} recordId={recordId} onUpload={() => nav("generate")} onSources={() => nav("uploaded")} />
     </AppShell>
   );
   return (
@@ -1472,7 +1487,7 @@ function Assistant({ back, nav }: { back: () => void; nav: Nav }) {
   };
 
   return (
-    <AppShell title="Records assistant" back={back}>
+    <AppShell title="Records assistant" back={back} nav={nav} active="assistant">
       <div className="assistant-content">
         <p className="caption">Searching the medical records uploaded to your account</p>
         <div className="ai-message"><strong>✦ Records assistant</strong><p>Hi, I can find test results in your records or compare results across dates. What would you like to know?</p></div>
@@ -1515,36 +1530,24 @@ function Assistant({ back, nav }: { back: () => void; nav: Nav }) {
       >
         <span>＋</span>
         <input
+          aria-label="Ask about your uploaded records"
           value={text}
           onChange={(event) => setText(event.target.value)}
           placeholder="Ask a question or choose a suggestion…"
           disabled={loading}
         />
-        <button disabled={loading || !text.trim()}>{loading ? "…" : "↑"}</button>
+        <button aria-label="Send question" disabled={loading || !text.trim()}>{loading ? "…" : "↑"}</button>
         <small className="ai-text">AI may make mistakes · Verify against original records</small>
       </form>
     </AppShell>
   );
 }
 
-function Compare({ table, back, nav }: { table?: boolean; back: () => void; nav: Nav }) {
-  return (
-    <AppShell
-      title={table ? "Compare results · Table" : "Compare past results"}
-      back={back}
-      fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · {table ? "Find & explain" : "Explain this result"}</Button>}
-    >
-      <div className="content compare-content">
-        <Card><h2>Hemoglobin&nbsp; · &nbsp;g/L</h2><p>Selected: 06-26 and 07-06</p>{!table && <p className="caption">Year not recorded. Check the original lab report.</p>}<Button onClick={() => nav(table ? "chart" : "table")}>{table ? "Show trend chart" : "Show data table"}</Button></Card>
-        {table ? (
-          <Card><h2>Result comparison</h2><div className="result-table"><b>Date</b><b>Value</b><b>Unit</b><span>06-26</span><span>92</span><span>g/L</span><span>07-06</span><span>109</span><span>g/L</span></div><p className="subtle">Prototype reference range: 115–150 g/L.<br />Verify the reference range in each original report.</p><p className="caption">Year not recorded; no year has been assumed.</p><button className="text-button">View source records</button></Card>
-        ) : (
-          <Card><h2>Change between records</h2><div className="chart"><img src={icons.chart} alt="" /><span className="v92">92</span><span className="v109">109</span><span className="d1">06-26</span><span className="d2">07-06</span><span className="unit">g/L</span></div><p>The value rose from 92 to 109 g/L, an increase of 17 g/L. This alone does not indicate improvement or deterioration.</p></Card>
-        )}
-        {table ? <Card><h2>Next step</h2><p>Add “Which other tests are needed to interpret this result?” to your follow-up questions.</p><Button onClick={() => nav("details")}>Back to follow-up questions</Button></Card> : <Card><h2>View each record</h2><Button>06-26 · 92 g/L · View record</Button><Button>07-06 · 109 g/L · View record</Button><p className="caption">Before comparing, verify the indicator, unit, dates, and each report&apos;s reference range.</p></Card>}
-      </div>
-    </AppShell>
-  );
+function Compare({ back, nav }: { table?: boolean; back: () => void; nav: Nav }) {
+  return <AppShell title="Compare past" nav={nav} active="compare" back={back}
+    fixedAction={<Button className="ai-text" onClick={() => nav("assistant")}>Ask AI · Find &amp; explain</Button>}>
+    <IndicatorHistory onUpload={() => nav("generate")} />
+  </AppShell>;
 }
 
 export default function App() {

@@ -1,0 +1,7 @@
+node_modules
+.git
+.openai
+.env*
+tmp
+output
+/supabase/
