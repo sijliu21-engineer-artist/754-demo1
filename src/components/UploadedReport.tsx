@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { projectId, publicAnonKey } from "../../utils/supabase/info";
-import { recognizeFile } from "../lib/recognition";
+import { recognizeFileDetailed } from "../lib/recognition";
+import { useRecognitionReview, type RecognizedUpload } from "./RecognitionReview";
 
 type Fact = { label: string; value: string; sourceId: string; quote: string };
 type Report = {
@@ -28,6 +29,7 @@ async function request(path: string, options: RequestInit = {}) {
 }
 
 export default function UploadedReport({ onUpload, onSources, recordId }: { onUpload: () => void; onSources: () => void; recordId?: string }) {
+  const { reviewRecognitions, reviewDialog } = useRecognitionReview();
   const reportPath = recordId ? `report?recordId=${encodeURIComponent(recordId)}` : "report";
   const [report, setReport] = useState<Report | null>(null);
   const [pending, setPending] = useState<Array<{ id: string; fileName: string }>>([]);
@@ -79,16 +81,16 @@ export default function UploadedReport({ onUpload, onSources, recordId }: { onUp
       for (const record of pending) {
         setProgress(`Opening ${record.fileName}…`);
         const original = await request(`records/${record.id}/recognition-url`, { method: "POST" });
-        const texts = [];
+        const recognized: RecognizedUpload[] = [];
         for (const fileSource of original.files || [original]) {
           const response = await fetch(fileSource.url);
           if (!response.ok) throw new Error(`Unable to download ${fileSource.fileName}.`);
           const file = new File([await response.blob()], fileSource.fileName, { type: fileSource.mimeType });
-          const text = await recognizeFile(file, (message) => { if (active.current) setProgress(`${fileSource.fileName}: ${message}`); });
-          if (!text.trim()) throw new Error(`No text was found in ${fileSource.fileName}. Try a clearer image.`);
-          texts.push(`FILE: ${fileSource.fileName}\n${text}`);
+          const recognition = await recognizeFileDetailed(file, (message) => { if (active.current) setProgress(`${fileSource.fileName}: ${message}`); });
+          recognized.push({ file, recognition });
         }
-        const extractedText = texts.join("\n\n");
+        const verifiedTexts = await reviewRecognitions(recognized);
+        const extractedText = recognized.map((entry, i) => `FILE ${i + 1}: ${entry.file.name}\n${verifiedTexts[i]}`).join("\n\n");
         await request(`records/${record.id}/text`, { method: "PUT", body: JSON.stringify({ extractedText }) });
       }
       if (active.current) setPending([]);
@@ -102,6 +104,7 @@ export default function UploadedReport({ onUpload, onSources, recordId }: { onUp
   };
 
   return <div className="content generated-report">
+    {reviewDialog}
     <section className="card">
       <div className="report-heading">
         <svg className="generated-report-icon" width="34" height="40" viewBox="0 0 34 40" fill="none" aria-hidden="true"><path d="M6 2h15l9 9v27H6V2Z" stroke="currentColor" strokeWidth="3" /><path d="M21 2v10h9M11 20h13M11 27h13" stroke="currentColor" strokeWidth="3" /></svg>

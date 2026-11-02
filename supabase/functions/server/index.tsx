@@ -1,3 +1,4 @@
+import { registerVisionRoutes } from "./vision_routes.tsx";
 import { Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { logger } from "npm:hono/logger";
@@ -27,6 +28,7 @@ app.get("/make-server-ba71e98d/health", (c) => {
   return c.json({ status: "ok" });
 });
 
+registerVisionRoutes(app);
 registerAuthRoutes(app);
 registerRecordRoutes(app);
 registerChatRoutes(app);

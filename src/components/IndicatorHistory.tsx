@@ -1,3 +1,4 @@
+import { describeChange } from "../lib/history-display";
 import { useEffect, useState } from "react";
 import { projectId, publicAnonKey } from "../../utils/supabase/info";
 import OriginalFile from "./OriginalFile";
@@ -67,6 +68,7 @@ export default function IndicatorHistory({ onUpload }: { onUpload: () => void })
   const [observations, setObservations] = useState<Observation[]>([]);
   const groups = groupRows(observations);
   const [selected, setSelected] = useState<string | null>(null);
+  useEffect(() => { document.querySelector(".page-scroll")?.scrollTo(0, 0); }, [selected]);
   const [query, setQuery] = useState("");
   const [table, setTable] = useState(false);
   const [confirmedPatient, setConfirmedPatient] = useState(false);
@@ -115,18 +117,20 @@ export default function IndicatorHistory({ onUpload }: { onUpload: () => void })
   const canChart = dated.length >= 2 && new Set(dated.map((row) => row.date)).size >= 2 && unitReadable && (!needsPatientConfirmation || confirmedPatient);
   const points = dated.map((row) => ({ row, time: Date.parse(row.date!) }));
   const chartDates = [...new Set(dated.map((row) => row.date!))];
-  const chartWidth = Math.max(640, chartDates.length * 125 + 110);
+  const chartWidth = Math.max(335, chartDates.length * 90 + 80);
   const minValue = Math.min(...dated.map((row) => row.value));
   const maxValue = Math.max(...dated.map((row) => row.value));
   const margin = Math.max((maxValue - minValue) * .15, Math.abs(maxValue) * .05, 1);
   const x = (time: number) => 55 + chartDates.findIndex((date) => Date.parse(date) === time) / (chartDates.length - 1 || 1) * (chartWidth - 120);
   const y = (value: number) => 210 - (value - minValue + margin) / (maxValue - minValue + 2 * margin) * 170;
+  const filteredMetrics = metrics.filter((item) => `${item.name} ${item.rows.map((row) => row.name).join(" ")}`.toLowerCase().includes(query.trim().toLowerCase()));
   return <div className="content indicator-history">
     {status && <section className="card"><p role="status" aria-live="polite">{status}</p><p className="caption">The first index may take a few minutes. Previously indexed uploads are reused.</p></section>}
     {warnings.length > 0 && <section className="card confirm-card"><details><summary>{warnings.length} indexing note(s)</summary>{warnings.map((warning, i) => <p key={i}>{warning}</p>)}</details><button className="button" disabled={Boolean(status)} onClick={() => setRetry(retry + 1)}>Retry indexing</button></section>}
     {!group ? <>
-      <section className="card"><h2>Your indicators</h2><p className="caption">Laboratory results from your uploaded reports. Each indicator appears once. Patient and unit groups are kept separate inside Compare.</p><label>Find an indicator<input className="indicator-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Platelets, Hemoglobin, 血小板…" /></label><p className="caption">{metrics.length} indicator(s)</p></section>
-      {metrics.filter((item) => `${item.name} ${item.rows.map((row) => row.name).join(" ")}`.toLowerCase().includes(query.toLowerCase())).map((item) => {
+      <section className="card indicator-search-card"><h2>Compare results across visits</h2><p className="caption">Explore laboratory results from your uploaded reports. Patient and unit groups stay separate.</p><label>Find an indicator<input className="indicator-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Platelets, Hemoglobin, 血小板…" /></label><p className="caption" role="status">{filteredMetrics.length} of {metrics.length} indicators</p></section>
+      {metrics.length > 0 && filteredMetrics.length === 0 && <section className="card search-empty"><h2>No matching indicators</h2><p>Try another name, or clear your search to see all recorded indicators.</p><button className="button" onClick={() => setQuery("")}>Clear search</button></section>}
+      {filteredMetrics.map((item) => {
         const dates = item.rows.filter((row) => row.date).map((row) => row.date!);
         return <section className="card" key={item.key}><h2>{item.name}</h2><p>{item.rows.length} result(s){dates.length > 0 && ` · ${dates[0]} → ${dates.at(-1)}`}</p><p className="caption">{item.series.map((series) => series.unit || "Unit not recorded").filter((unit, i, all) => all.indexOf(unit) === i).join(" · ")}{item.series.length > 1 && ` · ${item.series.length} patient / unit groups`}</p><p className="caption">{new Set(item.rows.map((row) => row.sourceId)).size} source file(s){item.rows.some((row) => !row.date) && " · Some examination dates need confirmation"}</p><button className="button" onClick={() => { setSelected(item.series[0].key); setTable(false); setConfirmedPatient(false); }}>Compare →</button></section>;
       })}
@@ -134,16 +138,27 @@ export default function IndicatorHistory({ onUpload }: { onUpload: () => void })
       {groups.length > 0 && <button className="button" disabled={Boolean(status)} onClick={() => setRetry(retry + 1)}>Check for new uploads</button>}
     </> : <>
       <button className="button" onClick={() => setSelected(null)}>← All indicators</button>
-      <section className="card"><h2>{group.name} · {group.unit || "Unit not recorded"}</h2>{siblingSeries.length > 1 && <label>Patient / unit group<select className="indicator-search" value={group.key} onChange={(event) => { setSelected(event.target.value); setConfirmedPatient(false); }}>{siblingSeries.map((series) => <option value={series.key} key={series.key}>{series.patient || "Patient not identified"} · {series.unit || "Unit not recorded"} · {series.rows.length} results</option>)}</select></label>}<p>{group.rows.length} historical result(s) · earliest to latest</p><p className="caption">Patient: {group.patient || "Not identified"}</p>{needsPatientConfirmation && <label className="indicator-confirm"><input type="checkbox" checked={confirmedPatient} onChange={(event) => setConfirmedPatient(event.target.checked)} /> I checked the originals: these results belong to the same patient.</label>}<button className="button" disabled={!canChart && table} onClick={() => setTable(!table)}>{table ? "Show trend chart" : "Show data table"}</button>{!canChart && <p className="notice">A trend needs two different full examination dates, a readable recorded unit, and a confirmed patient. All extracted results remain in the table below.</p>}</section>
+      <section className="card"><h2>{group.name} · {group.unit || "Unit not recorded"}</h2>
+        <p>{dated.length >= 2 ? `${dated[0].date} → ${dated.at(-1)?.date} · ${group.rows.length} results` : `${group.rows.length} historical results`}</p>
+        <span className="indicator-group-label">Patient / unit group</span>
+        <div className="indicator-group">
+          {siblingSeries.length > 1 ? <select aria-label="Patient / unit group" className="indicator-search" value={group.key} onChange={event => {setSelected(event.target.value);setConfirmedPatient(false);}}>{siblingSeries.map(series => <option key={series.key} value={series.key}>{series.patient || "Patient not identified"} · {series.unit}</option>)}</select> : <strong>{group.patient || "Patient not identified"} · {group.unit || "Unit not recorded"} ✓</strong>}
+          <span className="caption">{group.rows.length} results</span>
+        </div>
+        {needsPatientConfirmation && <label className="indicator-confirm"><input type="checkbox" checked={confirmedPatient} onChange={event => setConfirmedPatient(event.target.checked)} /> I checked the originals: these results belong to the same patient.</label>}
+        <button className="button" disabled={!canChart && table} onClick={() => setTable(!table)}>{table ? "Show trend chart" : "Show data table"}</button>
+        {!canChart && <p className="notice">A trend needs two different full examination dates, a readable recorded unit, and a confirmed patient. All extracted results remain in the table below.</p>}
+      </section>
       <section className="card"><h2>{table || !canChart ? "Result comparison" : "Change over time"}</h2>
         {table || !canChart ? <div className="indicator-table-wrap"><table className="indicator-table"><thead><tr><th>Date</th><th>Value</th><th>Unit</th><th>Reference range</th><th>Source</th></tr></thead><tbody>{group.rows.map((row, i) => <tr key={i}><td>{row.date || "Not recorded"}</td><td>{row.valueText}</td><td>{row.unit || "—"}</td><td>{row.reference || "Not recorded"}</td><td><button className="text-button" onClick={() => setOriginal(row)}>{row.fileName}</button></td></tr>)}</tbody></table></div> : <div className="indicator-chart-scroll"><svg className="indicator-chart" style={{ minWidth: chartDates.length > 4 ? chartWidth : 0 }} viewBox={`0 0 ${chartWidth} 295`} role="img" aria-label={`${group.name} from ${dated[0].date} to ${dated.at(-1)?.date}`}><path d={`M55 25V230H${chartWidth - 40}`} fill="none" stroke="#c5d2c7" /><text x="5" y="18" fontSize="12">{group.unit}</text><polyline fill="none" stroke="#304d3b" strokeWidth="3" points={points.map((point) => `${x(point.time)},${y(point.row.value)}`).join(" ")} />{points.map((point, i) => <g key={i}><circle cx={x(point.time)} cy={y(point.row.value)} r="5" fill="#304d3b"><title>{point.row.date}: {point.row.valueText} {group.unit} · {point.row.fileName}</title></circle><text x={x(point.time)} y={y(point.row.value) - 12} textAnchor="middle" fontSize="12">{point.row.valueText}</text></g>)}{chartDates.map((date) => {
           const dateX = x(Date.parse(date));
           const count = dated.filter((row) => row.date === date).length;
           return <g key={date}><path d={`M${dateX} 230v6`} stroke="#8a9c8e" /><text x={dateX} y="255" textAnchor="middle" fontSize="12">{date}</text>{count > 1 && <text x={dateX} y="276" textAnchor="middle" fontSize="11">{count} results</text>}</g>;
         })}</svg></div>}
-        <p className="caption">{dated.length} dated result(s) across {chartDates.length} examination date(s). Every examination date is labeled; dates are equally spaced in chronological order. Records on the same date share one tick. Examination dates are taken from the originals. Undated results are excluded from the chart. Reference ranges are retained for each record.</p>
+        <p className="caption">{canChart ? describeChange(dated[0].value, dated.at(-1)!.value, group.unit) : "Check the recorded dates, units and patient before comparing."} Check each dated original below. This comparison is not a diagnosis.</p>
+
       </section>
-      <section className="card"><h2>View each record</h2>{group.rows.map((row, i) => <details key={i}><summary>{row.date || "Date not recorded"} · {row.valueText} {row.unit} · {row.fileName}</summary><p className="caption">Original indicator / 原始指标: {row.name}</p><p className="indicator-quote">{row.quote}</p><button className="button" onClick={() => setOriginal(row)}>View original record</button></details>)}</section>
+      <section className="card"><h2>View each record</h2>{group.rows.map((row,i)=><button className="indicator-source" key={i} onClick={()=>setOriginal(row)}><strong>{row.date || "Date not recorded"} · {row.valueText} {row.unit} ›</strong><span className="caption">{row.fileName}</span></button>)}</section>
     </>}
     {original && <OriginalFile record={{ id: original.recordId, fileName: original.fileName, mimeType: original.mimeType }} close={() => setOriginal(null)} />}
   </div>;
